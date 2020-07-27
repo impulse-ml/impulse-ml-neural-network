@@ -1,0 +1,16 @@
+trainer.setLearningIterations(500);
+trainer.setLearningRate(0.001);
+trainer.setVerboseStep(50);
+
+gradient descent
+
+/////////////
+
+100 iterations
+
+clean: 72
+BLAS: 65
+OpenMP: 19
+BLAS + OpenMP: 23
+OpenMP + gcc: 8
+gcc + mkl 11
