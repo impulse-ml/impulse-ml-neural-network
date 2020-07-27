@@ -60,8 +60,8 @@ void test1() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::GradientDescent trainer(net);
-    trainer.setLearningIterations(20000);
+    Trainer::MiniBatchGradientDescent trainer(net);
+    trainer.setLearningIterations(2);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.0);
     trainer.setVerbose(true);
@@ -78,10 +78,94 @@ void test1() {
     auto duration = duration_cast<seconds>(t2 - t1).count();
     std::cout << "Time: " << duration << std::endl;
     std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    std::cout << "Cost: " << trainer.cost(dataset).getCost() << std::endl;
+
+    Serializer serializer(net);
+    serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test1.json");
+}
+
+void test_conv_mnist() {
+    Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
+            "/home/user/impulse-ml-neural-network/data/mnist_test_1000.csv");
+    Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
+    Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
+    slicer.addOutputColumn(0);
+    for (int i = 0; i < 28 * 28; i++) {
+        slicer.addInputColumn(i + 1);
+    }
+
+    Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
+
+    Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
+    modifier2.applyToColumn(0);
+
+    Builder::ConvBuilder builder({28, 28, 1});
+
+    builder.createLayer<Layer::Conv>([](auto *layer) {
+        layer->setFilterSize(4);
+        layer->setPadding(1);
+        layer->setStride(1);
+        layer->setNumFilters(32);
+    });
+
+    builder.createLayer<Layer::MaxPool>([](auto *layer) {
+        layer->setFilterSize(2);
+        layer->setStride(2);
+    });
+
+    builder.createLayer<Layer::Conv>([](auto *layer) {
+        layer->setFilterSize(3);
+        layer->setPadding(1);
+        layer->setStride(1);
+        layer->setNumFilters(64);
+    });
+
+    builder.createLayer<Layer::MaxPool>([](auto *layer) {
+        layer->setFilterSize(2);
+        layer->setStride(2);
+    });
+
+    builder.createLayer<Layer::FullyConnected>([](auto *layer) {
+
+    });
+
+    builder.createLayer<Layer::Relu>([](auto *layer) {
+        layer->setSize(1024);
+    });
+
+    builder.createLayer<Layer::Softmax>([](auto *layer) {
+        layer->setSize(10);
+    });
+
+    Network::ConvNetwork net = builder.getNetwork();
+
+    Trainer::MiniBatchGradientDescent trainer(net);
+    trainer.setLearningIterations(3);
+    trainer.setVerboseStep(1);
+    trainer.setRegularization(0.0);
+    trainer.setVerbose(true);
+    trainer.setLearningRate(0.05);
+    trainer.setBatchSize(50);
+
+    Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
+    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    trainer.train(slicedDataset);
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+    auto duration = duration_cast<seconds>(t2 - t1).count();
+    std::cout << "Time: " << duration << std::endl;
+    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
+
+    Serializer serializer(net);
+    serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test_conv_mnist.json");
 }
 
 int main() {
     test1();
+    //test_conv_mnist();
     return 0;
 }
