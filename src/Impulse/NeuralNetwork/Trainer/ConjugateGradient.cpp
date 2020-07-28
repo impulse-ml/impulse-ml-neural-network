@@ -12,23 +12,25 @@ namespace Impulse {
 
             void ConjugateGradient::train(Impulse::Dataset::SlicedDataset &dataSet) {
                 Math::Fmincg minimizer;
-                Network::Abstract network = this->network;
-                Math::T_Vector theta = network.getRolledTheta();
+                Eigen::VectorXd theta = this->network.getRolledTheta();
                 double regularization = this->regularization;
 
-                network.backward(dataSet.getInput(), dataSet.getOutput(), network.forward(dataSet.getInput()),
-                                 this->regularization);
+                Eigen::MatrixXd input = dataSet.getInput();
+                Eigen::MatrixXd output = dataSet.getOutput();
+                Eigen::MatrixXd forward = this->network.forward(input);
+
+                this->network.backward(input, output, forward, this->regularization);
 
                 Trainer::StepFunction callback(
-                        [this, &dataSet, &regularization](Math::T_Vector input) {
-                            this->network.setRolledTheta(input);
-                            this->network.backward(dataSet.getInput(), dataSet.getOutput(),
-                                                   this->network.forward(dataSet.getInput()), regularization);
+                        [this, &dataSet, &regularization, &input, &output, &forward](Eigen::VectorXd input2) {
+                            this->network.setRolledTheta(input2);
+                            Eigen::MatrixXd forward = this->network.forward(input);
+                            this->network.backward(input, output, forward, regularization);
                             return this->cost(dataSet, true);
                         });
 
-                this->network.setRolledTheta(
-                        minimizer.minimize(callback, theta, this->learningIterations, this->verbose));
+                Eigen::VectorXd minimized = minimizer.minimize(callback, theta, this->learningIterations, this->verbose);
+                this->network.setRolledTheta(minimized);
             }
         }
     }

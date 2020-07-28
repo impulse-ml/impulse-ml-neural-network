@@ -31,7 +31,11 @@ namespace Impulse {
                     for (T_Size batch = 0, offset = 0; batch < numberOfExamples; batch += batchSize, offset++) {
                         high_resolution_clock::time_point beginIterationBatch = high_resolution_clock::now();
 
-                        network.backward(dataSet.getInput(offset, batchSize), dataSet.getOutput(offset, batchSize), network.forward(dataSet.getInput(offset, batchSize)), this->regularization);
+                        Eigen::MatrixXd input = dataSet.getInput(offset, batchSize);
+                        Eigen::MatrixXd output = dataSet.getOutput(offset, batchSize);
+                        Eigen::MatrixXd forward = network.forward(input);
+
+                        network.backward(input, output, forward, this->regularization);
 
                         for (T_Size j = 0; j < network.getSize(); j++) {
                             Layer::LayerPointer layer = network.getLayer(j);

@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_LAYER_POOL_H
-#define IMPULSE_NEURALNETWORK_LAYER_POOL_H
+#pragma once
 
 #include "../include.h"
 
@@ -30,15 +29,15 @@ namespace Impulse {
 
                 T_Size getStride();
 
-                Math::T_Matrix forward(const Math::T_Matrix &input) override;
+                Eigen::MatrixXd forward(const Eigen::MatrixXd &input) override;
 
-                Math::T_Matrix activation(Math::T_Matrix &m) override;
+                Eigen::MatrixXd activation(Eigen::MatrixXd &m) override;
 
-                Math::T_Matrix derivative() override;
+                Eigen::MatrixXd derivative() override;
 
                 const T_String getType() override;
 
-                double loss(Math::T_Matrix output, Math::T_Matrix predictions) override;
+                double loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) override;
 
                 double error(T_Size m) override;
 
@@ -51,5 +50,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_LAYER_POOL_H

@@ -91,8 +91,9 @@ namespace Impulse {
                     }
                 }
 
-                Math::T_RawVector theta = jsonFile["weights"];
-                builder.getNetwork().setRolledTheta(Math::rawToVector(theta));
+                Math::T_RawVector weights = jsonFile["weights"];
+                Eigen::VectorXd theta = Math::rawToVector(weights);
+                builder.getNetwork().setRolledTheta(theta);
 
                 return builder;
             }

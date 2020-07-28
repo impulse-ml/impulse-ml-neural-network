@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_MATH_FMINCG_H
-#define IMPULSE_NEURALNETWORK_MATH_FMINCG_H
+#pragma once
 
 // number of extrapolation runs, set to a higher value for smaller ravine landscapes
 #define _EXT 3.0
@@ -39,9 +38,9 @@ namespace Impulse {
                  * @param verbose
                  * @return
                  */
-                Math::T_Vector minimize(
+                Eigen::VectorXd minimize(
                         Trainer::StepFunction stepFunction,
-                        Math::T_Vector theta,
+                        Eigen::VectorXd theta,
                         T_Size length,
                         bool verbose
                 );
@@ -49,5 +48,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_MATH_FMINCG_H

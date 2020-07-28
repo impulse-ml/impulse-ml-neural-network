@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_COMMON_H
-#define IMPULSE_NEURALNETWORK_COMMON_H
+#pragma once
 
 #include "include.h"
 
@@ -17,5 +16,3 @@ namespace Impulse {
         } T_Dimension;
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_

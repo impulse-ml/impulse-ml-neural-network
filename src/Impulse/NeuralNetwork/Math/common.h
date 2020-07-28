@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_MATH_COMMON_H
-#define IMPULSE_NEURALNETWORK_MATH_COMMON_H
+#pragma once
 
 #include "../include.h"
 
@@ -18,16 +17,14 @@ namespace Impulse {
              * @param vec
              * @return
              */
-            Math::T_RawVector vectorToRaw(Math::T_Vector &vec);
+            Math::T_RawVector vectorToRaw(Eigen::VectorXd &vec);
 
             /**
              * Translates std::vector to Eigen3 vector.
              * @param vec
              * @return
              */
-            Math::T_Vector rawToVector(Math::T_RawVector &vec);
+            Eigen::VectorXd rawToVector(Math::T_RawVector &vec);
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_MATH_COMMON_H

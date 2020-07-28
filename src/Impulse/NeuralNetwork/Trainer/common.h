@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_TRAINER_COMMON_H
-#define IMPULSE_NEURALNETWORK_TRAINER_COMMON_H
+#pragma once
 
 #include "../include.h"
 
@@ -14,7 +13,7 @@ namespace Impulse {
             struct CostGradientResult {
                 double cost;
                 double accuracy;
-                Math::T_Vector gradient;
+                Eigen::VectorXd gradient;
 
                 double &getCost() {
                     return this->cost;
@@ -24,14 +23,12 @@ namespace Impulse {
                     return this->accuracy;
                 }
 
-                Math::T_Vector &getGradient() {
+                Eigen::VectorXd &getGradient() {
                     return this->gradient;
                 }
             };
 
-            typedef std::function<CostGradientResult(Math::T_Vector)> StepFunction;
+            typedef std::function<CostGradientResult(Eigen::VectorXd)> StepFunction;
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_TRAINER_COMMON_H

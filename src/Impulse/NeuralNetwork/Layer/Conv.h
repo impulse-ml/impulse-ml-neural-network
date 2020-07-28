@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_LAYER_CONV_H
-#define IMPULSE_NEURALNETWORK_LAYER_CONV_H
+#pragma once
 
 #include "../include.h"
 
@@ -24,7 +23,7 @@ namespace Impulse {
 
                 void configure() override;
 
-                Math::T_Matrix forward(const Math::T_Matrix &input) override;
+                Eigen::MatrixXd forward(const Eigen::MatrixXd &input) override;
 
                 T_Size getOutputHeight() override;
 
@@ -48,18 +47,16 @@ namespace Impulse {
 
                 T_Size getNumFilters();
 
-                Math::T_Matrix activation(Math::T_Matrix &m) override;
+                Eigen::MatrixXd activation(Eigen::MatrixXd &m) override;
 
-                Math::T_Matrix derivative() override;
+                Eigen::MatrixXd derivative() override;
 
                 const T_String getType() override;
 
-                double loss(Math::T_Matrix output, Math::T_Matrix predictions) override;
+                double loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) override;
 
                 double error(T_Size m) override;
             };
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_LAYER_CONV_H

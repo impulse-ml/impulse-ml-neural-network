@@ -15,8 +15,8 @@ namespace Impulse {
                 this->layers.push_back(layer);
             }
 
-            Math::T_Matrix Abstract::forward(const Math::T_Matrix &input) {
-                Math::T_Matrix output = input;
+            Eigen::MatrixXd Abstract::forward(const Eigen::MatrixXd & input) {
+                Eigen::MatrixXd output = input;
 
                 for (auto &layer : this->layers) {
                     output = layer->forward(output);
@@ -26,10 +26,10 @@ namespace Impulse {
             }
 
             void
-            Abstract::backward(Math::T_Matrix X, Math::T_Matrix Y, Math::T_Matrix predictions, double regularization) {
+            Abstract::backward(Eigen::MatrixXd & X, Eigen::MatrixXd & Y, Eigen::MatrixXd & predictions, double regularization) {
                 long m = X.cols();
 
-                Math::T_Matrix delta = predictions.array() - Y.array();
+                Eigen::MatrixXd delta = predictions.array() - Y.array();
 
                 for (long i = this->layers.size() - 1; i >= 0; i--) {
                     auto layer = this->layers.at(static_cast<unsigned long>(i));
@@ -49,7 +49,7 @@ namespace Impulse {
                 return this->layers.at(key);
             }
 
-            Math::T_Vector Abstract::getRolledTheta() {
+            Eigen::VectorXd Abstract::getRolledTheta() {
                 Math::T_RawVector tmp;
 
                 for (T_Size i = 0; i < this->getSize(); i++) {
@@ -74,11 +74,11 @@ namespace Impulse {
                     }
                 }
 
-                Math::T_Vector result = Math::rawToVector(tmp);
+                Eigen::VectorXd result = Math::rawToVector(tmp);
                 return result;
             }
 
-            Math::T_Vector Abstract::getRolledGradient() {
+            Eigen::VectorXd Abstract::getRolledGradient() {
                 Math::T_RawVector tmp;
 
                 for (T_Size i = 0; i < this->getSize(); i++) {
@@ -101,11 +101,11 @@ namespace Impulse {
                     }
                 }
 
-                Math::T_Vector result = Math::rawToVector(tmp);
+                Eigen::VectorXd result = Math::rawToVector(tmp);
                 return result;
             }
 
-            void Abstract::setRolledTheta(Math::T_Vector theta) {
+            void Abstract::setRolledTheta(Eigen::VectorXd & theta) {
                 unsigned long t = 0;
 
                 for (T_Size i = 0; i < this->getSize(); i++) {
@@ -129,7 +129,7 @@ namespace Impulse {
                 }
             }
 
-            double Abstract::loss(Math::T_Matrix output, Math::T_Matrix predictions) {
+            double Abstract::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 return this->layers.at(this->getSize() - 1)->loss(std::move(output), std::move(predictions));
             }
 

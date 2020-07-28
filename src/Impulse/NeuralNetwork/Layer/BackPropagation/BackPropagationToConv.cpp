@@ -10,7 +10,7 @@ namespace Impulse {
 
                 BackPropagationToConv::BackPropagationToConv(Layer::LayerPointer layer, Layer::LayerPointer previousLayer) : Abstract(layer, previousLayer) {}
 
-                Math::T_Matrix BackPropagationToConv::propagate(const Math::T_Matrix &input, T_Size numberOfExamples, double regularization, const Math::T_Matrix &sigma) {
+                Eigen::MatrixXd BackPropagationToConv::propagate(const Eigen::MatrixXd &input, T_Size numberOfExamples, double regularization, const Eigen::MatrixXd &sigma) {
 
                     auto *previousLayer = (Layer::Conv *) this->previousLayer.get();
 
@@ -24,12 +24,12 @@ namespace Impulse {
                     int inputHeight = previousLayer->getHeight();
                     int inputDepth = previousLayer->getDepth();
 
-                    Math::T_Matrix tmpResult((inputWidth + 2 * padding) * (inputHeight + 2 * padding) * inputDepth, numberOfExamples);
+                    Eigen::MatrixXd tmpResult((inputWidth + 2 * padding) * (inputHeight + 2 * padding) * inputDepth, numberOfExamples);
                     tmpResult.setZero();
 
-                    Math::T_Matrix result(inputWidth * inputHeight * inputDepth, numberOfExamples);
+                    Eigen::MatrixXd result(inputWidth * inputHeight * inputDepth, numberOfExamples);
 
-                    Math::T_Matrix aPrev = previousLayer->derivative();
+                    Eigen::MatrixXd aPrev = previousLayer->derivative();
 
                     previousLayer->gW.setZero();
                     previousLayer->gb.setZero();

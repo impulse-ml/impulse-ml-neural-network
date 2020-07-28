@@ -10,10 +10,10 @@ namespace Impulse {
 
                 BackPropagationToMaxPool::BackPropagationToMaxPool(Layer::LayerPointer layer, Layer::LayerPointer previousLayer) : Abstract(layer, previousLayer) {}
 
-                Math::T_Matrix BackPropagationToMaxPool::propagate(const Math::T_Matrix &input, T_Size numberOfExamples, double regularization, const Math::T_Matrix &sigma) {
+                Eigen::MatrixXd BackPropagationToMaxPool::propagate(const Eigen::MatrixXd &input, T_Size numberOfExamples, double regularization, const Eigen::MatrixXd &sigma) {
 
                     auto *prevLayer = (Layer::MaxPool *) this->previousLayer.get();
-                    Math::T_Matrix result(prevLayer->Z.rows(), prevLayer->Z.cols());
+                    Eigen::MatrixXd result(prevLayer->Z.rows(), prevLayer->Z.cols());
                     result.setZero();
 
                     T_Size filterSize = prevLayer->getFilterSize();

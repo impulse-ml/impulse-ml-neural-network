@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_LAYER_FULLYCONNECTED_H
-#define IMPULSE_NEURALNETWORK_LAYER_FULLYCONNECTED_H
+#pragma once
 
 #include "../include.h"
 
@@ -41,5 +40,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_LAYER_FULLYCONNECTED_H

@@ -14,27 +14,27 @@ namespace Impulse {
 
                 }
 
-                Math::T_Matrix BackPropagation1DTo1D::propagate(const Math::T_Matrix &input,
+                Eigen::MatrixXd BackPropagation1DTo1D::propagate(const Eigen::MatrixXd &input,
                                                                 T_Size numberOfExamples,
                                                                 double regularization,
-                                                                const Math::T_Matrix &sigma) {
+                                                                const Eigen::MatrixXd &sigma) {
 
-                    Math::T_Matrix previousActivations =
+                    Eigen::MatrixXd previousActivations =
                             this->previousLayer == nullptr ? input : this->previousLayer->A;
 
-                    Math::T_Matrix delta = sigma * previousActivations.transpose().conjugate();
+                    Eigen::MatrixXd delta = sigma * previousActivations.transpose().conjugate();
 
                     this->layer->gW = delta.array() / numberOfExamples +
                                       (regularization / numberOfExamples * this->layer->W.array());
                     this->layer->gb = sigma.rowwise().sum() / numberOfExamples;
 
                     if (this->previousLayer != nullptr) {
-                        Math::T_Matrix tmp1 = this->layer->W.transpose() * sigma;
-                        Math::T_Matrix tmp2 = this->previousLayer->derivative();
+                        Eigen::MatrixXd tmp1 = this->layer->W.transpose() * sigma;
+                        Eigen::MatrixXd tmp2 = this->previousLayer->derivative();
 
                         return tmp1.array() * tmp2.array();
                     }
-                    return Math::T_Matrix(); // return empty - this is first layer
+                    return Eigen::MatrixXd(); // return empty - this is first layer
                 }
             }
         }

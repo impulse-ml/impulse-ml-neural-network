@@ -1,5 +1,4 @@
-#ifndef IMPULSE_VECTORIZED_BACKPROPAGATION1DTO1D_H
-#define IMPULSE_VECTORIZED_BACKPROPAGATION1DTO1D_H
+#pragma once
 
 namespace Impulse {
 
@@ -13,14 +12,12 @@ namespace Impulse {
                 public:
                     BackPropagation1DTo1D(Layer::LayerPointer layer, Layer::LayerPointer previousLayer);
 
-                    Math::T_Matrix propagate(const Math::T_Matrix &input,
+                    Eigen::MatrixXd propagate(const Eigen::MatrixXd &input,
                                              T_Size numberOfExamples,
                                              double regularization,
-                                             const Math::T_Matrix &sigma);
+                                             const Eigen::MatrixXd &sigma);
                 };
             }
         }
     }
 }
-
-#endif //IMPULSE_VECTORIZED_BACKPROPAGATION1DTO1D_H

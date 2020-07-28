@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_CONV_BUILDER_H
-#define IMPULSE_NEURALNETWORK_CONV_BUILDER_H
+#pragma once
 
 #include "../include.h"
 
@@ -23,5 +22,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_CONV_BUILDER_H

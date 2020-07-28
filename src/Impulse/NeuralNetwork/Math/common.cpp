@@ -6,12 +6,12 @@ namespace Impulse {
 
         namespace Math {
 
-            Math::T_RawVector vectorToRaw(Math::T_Vector &vec) {
+            Math::T_RawVector vectorToRaw(Eigen::VectorXd & vec) {
                 return Math::T_RawVector(vec.data(), vec.data() + vec.rows() * vec.cols());
             }
 
-            Math::T_Vector rawToVector(Math::T_RawVector &vec) {
-                return Eigen::Map<Math::T_Vector, Eigen::Unaligned>(vec.data(), vec.size());
+            Eigen::VectorXd rawToVector(Math::T_RawVector & vec) {
+                return Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(vec.data(), vec.size());
             }
         }
     }

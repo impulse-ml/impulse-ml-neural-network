@@ -46,8 +46,8 @@ namespace Impulse {
 
                 // calculate cost from mini-batches
                 for (T_Size batch = 0, offset = 0; batch < numberOfExamples; batch += batchSize, offset++) {
-                    Math::T_Matrix predictedOutput = this->network.forward(dataSet.getInput(offset, batchSize));
-                    Math::T_Matrix correctOutput = dataSet.getOutput(offset, batchSize);
+                    Eigen::MatrixXd predictedOutput = this->network.forward(dataSet.getInput(offset, batchSize));
+                    Eigen::MatrixXd correctOutput = dataSet.getOutput(offset, batchSize);
 
                     auto miniBatchSize = (T_Size) correctOutput.cols();
 

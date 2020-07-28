@@ -24,23 +24,23 @@ namespace Impulse {
                 this->gb.resize(this->numFilters, 1);
             }
 
-            Math::T_Matrix Conv::forward(const Math::T_Matrix &input) {
+            Eigen::MatrixXd Conv::forward(const Eigen::MatrixXd &input) {
                 this->Z = input;
 
-                Math::T_Matrix result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(), input.cols());
+                Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(), input.cols());
 
 #pragma omp parallel
 #pragma omp for
                 for (T_Size i = 0; i < input.cols(); i++) {
-                    Math::T_Matrix conv = Utils::im2col(input.col(i), this->depth,
+                    Eigen::MatrixXd conv = Utils::im2col(input.col(i), this->depth,
                                                         this->height, this->width,
                                                         this->filterSize, this->filterSize,
                                                         this->padding, this->padding,
                                                         this->stride, this->stride);
 
-                    Math::T_Matrix tmp = ((this->W * conv).colwise() + this->b).transpose(); // transpose for
+                    Eigen::MatrixXd tmp = ((this->W * conv).colwise() + this->b).transpose(); // transpose for
                     // rolling to vector
-                    Eigen::Map<Math::T_Vector> tmp2(tmp.data(), tmp.size());
+                    Eigen::Map<Eigen::VectorXd> tmp2(tmp.data(), tmp.size());
                     result.col(i) = tmp2;
                 }
 
@@ -92,13 +92,13 @@ namespace Impulse {
                 return this->numFilters;
             }
 
-            Math::T_Matrix Conv::activation(Math::T_Matrix &m) {
+            Eigen::MatrixXd Conv::activation(Eigen::MatrixXd &m) {
                 return m.unaryExpr([](const double x) {
                     return std::max(0.0, x); // TODO: set it; RELU by default
                 });
             }
 
-            Math::T_Matrix Conv::derivative() {
+            Eigen::MatrixXd Conv::derivative() {
                 return this->A.unaryExpr([](const double x) { // TODO: derivative for RELU
                     if (x > 0.0) {
                         return 1.0;
@@ -111,7 +111,7 @@ namespace Impulse {
                 return TYPE_CONV;
             }
 
-            double Conv::loss(Math::T_Matrix output, Math::T_Matrix predictions) {
+            double Conv::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
                 static_assert("No loss for CONV layer.", "");
                 return 0.0;
             }

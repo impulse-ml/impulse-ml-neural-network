@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_LAYER_ABSTRACT_H
-#define IMPULSE_NEURALNETWORK_LAYER_ABSTRACT_H
+#pragma once
 
 #include "../include.h"
 
@@ -27,12 +26,12 @@ namespace Impulse {
                 Layer::LayerPointer previousLayer = nullptr;                            // pointer to the previous layer in the network
 
             public:
-                Math::T_Matrix W;                                                       // weights
-                Math::T_Vector b;                                                       // bias
-                Math::T_Matrix A;                                                       // output of the layer after activation
-                Math::T_Matrix Z;                                                       // output of the layer before activation
-                Math::T_Matrix gW;                                                      // gradient for weights
-                Math::T_Vector gb;                                                      // gradient for biases
+                Eigen::MatrixXd W;                                                       // weights
+                Eigen::VectorXd b;                                                       // bias
+                Eigen::MatrixXd A;                                                       // output of the layer after activation
+                Eigen::MatrixXd Z;                                                       // output of the layer before activation
+                Eigen::MatrixXd gW;                                                      // gradient for weights
+                Eigen::VectorXd gb;                                                      // gradient for biases
                 BackPropagation::BackPropagationPointer backpropagation = nullptr;      // pointer to the backpropagation algorithm
                 /**
                  * Pure constructor
@@ -44,20 +43,20 @@ namespace Impulse {
                  * @param input
                  * @return
                  */
-                virtual Math::T_Matrix forward(const Math::T_Matrix &input);
+                virtual Eigen::MatrixXd forward(const Eigen::MatrixXd &input);
 
                 /**
                  * Calculates activated values.
                  * @param input
                  * @return
                  */
-                virtual Math::T_Matrix activation(Math::T_Matrix &m) = 0;
+                virtual Eigen::MatrixXd activation(Eigen::MatrixXd &m) = 0;
 
                 /**
                  * Calculates derivative. It depends on activation function.
                  * @return
                  */
-                virtual Math::T_Matrix derivative() = 0;
+                virtual Eigen::MatrixXd derivative() = 0;
 
                 /**
                  * Getter for layer type.
@@ -148,7 +147,7 @@ namespace Impulse {
                  * @param predictions
                  * @return
                  */
-                virtual double loss(Math::T_Matrix output, Math::T_Matrix predictions) = 0;
+                virtual double loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) = 0;
 
                 /**
                  * Error term for network.
@@ -187,5 +186,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_LAYER_ABSTRACT_H

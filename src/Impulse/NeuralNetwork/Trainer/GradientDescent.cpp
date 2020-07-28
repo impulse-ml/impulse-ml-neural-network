@@ -18,7 +18,11 @@ namespace Impulse {
                 for (T_Size i = 0; i < iterations; i++) {
                     high_resolution_clock::time_point begin = high_resolution_clock::now();
 
-                    network.backward(dataSet.getInput(), dataSet.getOutput(), network.forward(dataSet.getInput()), this->regularization);
+                    Eigen::MatrixXd input = dataSet.getInput();
+                    Eigen::MatrixXd output = dataSet.getOutput();
+                    Eigen::MatrixXd forward = network.forward(input);
+
+                    network.backward(input, output, forward, this->regularization);
 
                     Trainer::CostGradientResult result = this->cost(dataSet);
 

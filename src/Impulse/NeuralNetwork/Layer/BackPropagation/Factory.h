@@ -1,5 +1,4 @@
-#ifndef IMPULSE_VECTORIZED_BACKPROPAGATION_H
-#define IMPULSE_VECTORIZED_BACKPROPAGATION_H
+#pragma once
 
 #include "../../include.h"
 
@@ -19,5 +18,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_VECTORIZED_BACKPROPAGATION_H

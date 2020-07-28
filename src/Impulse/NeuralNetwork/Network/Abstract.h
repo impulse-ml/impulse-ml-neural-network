@@ -1,5 +1,4 @@
-#ifndef IMPULSE_NEURALNETWORK_NETWORK_H
-#define IMPULSE_NEURALNETWORK_NETWORK_H
+#pragma once
 
 #include "../include.h"
 
@@ -23,9 +22,9 @@ namespace Impulse {
 
                 void addLayer(Layer::LayerPointer layer);
 
-                Math::T_Matrix forward(const Math::T_Matrix &input);
+                Eigen::MatrixXd forward(const Eigen::MatrixXd & input);
 
-                void backward(Math::T_Matrix X, Math::T_Matrix Y, Math::T_Matrix predictions, double regularization);
+                void backward(Eigen::MatrixXd & X, Eigen::MatrixXd & Y, Eigen::MatrixXd & predictions, double regularization);
 
                 T_Dimension getDimension();
 
@@ -33,13 +32,13 @@ namespace Impulse {
 
                 Layer::LayerPointer getLayer(T_Size key);
 
-                Math::T_Vector getRolledTheta();
+                Eigen::VectorXd getRolledTheta();
 
-                Math::T_Vector getRolledGradient();
+                Eigen::VectorXd getRolledGradient();
 
-                void setRolledTheta(Math::T_Vector theta);
+                void setRolledTheta(Eigen::VectorXd & theta);
 
-                double loss(Math::T_Matrix output, Math::T_Matrix predictions);
+                double loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions);
 
                 double error(T_Size m);
 
@@ -48,5 +47,3 @@ namespace Impulse {
         }
     }
 }
-
-#endif //IMPULSE_NEURALNETWORK_NETWORK_H

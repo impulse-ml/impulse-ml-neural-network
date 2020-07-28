@@ -1,5 +1,4 @@
-#ifndef IMPULSE_VECTORIZED_ABSTRACT_H
-#define IMPULSE_VECTORIZED_ABSTRACT_H
+#pragma once
 
 #include "../../include.h"
 
@@ -28,14 +27,12 @@ namespace Impulse {
                 public:
                     Abstract(Layer::LayerPointer layer, Layer::LayerPointer previousLayer);
 
-                    virtual Math::T_Matrix propagate(const Math::T_Matrix &input,
+                    virtual Eigen::MatrixXd propagate(const Eigen::MatrixXd &input,
                                                      T_Size numberOfExamples,
                                                      double regularization,
-                                                     const Math::T_Matrix &delta) = 0;
+                                                     const Eigen::MatrixXd &delta) = 0;
                 };
             }
         }
     }
 }
-
-#endif //IMPULSE_VECTORIZED_ABSTRACT_H
