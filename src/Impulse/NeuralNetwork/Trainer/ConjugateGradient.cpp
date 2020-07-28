@@ -29,7 +29,8 @@ namespace Impulse {
                             return this->cost(dataSet, true);
                         });
 
-                Eigen::VectorXd minimized = minimizer.minimize(callback, theta, this->learningIterations, this->verbose);
+                Eigen::VectorXd minimized = minimizer.minimize(callback, theta, this->learningIterations,
+                                                               this->verbose);
                 this->network.setRolledTheta(minimized);
             }
         }

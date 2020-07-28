@@ -15,7 +15,7 @@ namespace Impulse {
                 this->layers.push_back(layer);
             }
 
-            Eigen::MatrixXd Abstract::forward(const Eigen::MatrixXd & input) {
+            Eigen::MatrixXd Abstract::forward(const Eigen::MatrixXd &input) {
                 Eigen::MatrixXd output = input;
 
                 for (auto &layer : this->layers) {
@@ -26,7 +26,8 @@ namespace Impulse {
             }
 
             void
-            Abstract::backward(Eigen::MatrixXd & X, Eigen::MatrixXd & Y, Eigen::MatrixXd & predictions, double regularization) {
+            Abstract::backward(Eigen::MatrixXd &X, Eigen::MatrixXd &Y, Eigen::MatrixXd &predictions,
+                               double regularization) {
                 long m = X.cols();
 
                 Eigen::MatrixXd delta = predictions.array() - Y.array();
@@ -59,7 +60,8 @@ namespace Impulse {
                         continue;
                     }
 
-                    tmp.reserve((unsigned long) (layer->W.cols() * layer->W.rows()) + (layer->b.cols() * layer->b.rows()));
+                    tmp.reserve(
+                            (unsigned long) (layer->W.cols() * layer->W.rows()) + (layer->b.cols() * layer->b.rows()));
 
                     for (T_Size j = 0; j < layer->W.rows(); j++) {
                         for (T_Size k = 0; k < layer->W.cols(); k++) {
@@ -105,7 +107,7 @@ namespace Impulse {
                 return result;
             }
 
-            void Abstract::setRolledTheta(Eigen::VectorXd & theta) {
+            void Abstract::setRolledTheta(Eigen::VectorXd &theta) {
                 unsigned long t = 0;
 
                 for (T_Size i = 0; i < this->getSize(); i++) {
@@ -129,7 +131,7 @@ namespace Impulse {
                 }
             }
 
-            double Abstract::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
+            double Abstract::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
                 return this->layers.at(this->getSize() - 1)->loss(output, predictions);
             }
 

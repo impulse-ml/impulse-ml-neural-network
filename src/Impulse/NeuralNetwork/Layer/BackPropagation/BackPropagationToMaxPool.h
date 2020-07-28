@@ -15,9 +15,9 @@ namespace Impulse {
                     BackPropagationToMaxPool(Layer::LayerPointer layer, Layer::LayerPointer previousLayer);
 
                     Eigen::MatrixXd propagate(const Eigen::MatrixXd &input,
-                                             T_Size numberOfExamples,
-                                             double regularization,
-                                             const Eigen::MatrixXd &sigma) override;
+                                              T_Size numberOfExamples,
+                                              double regularization,
+                                              const Eigen::MatrixXd &sigma) override;
                 };
             }
         }

@@ -117,5 +117,6 @@ add_executable(impulse_ml_neural_network
         src/Impulse/NeuralNetwork/AbstractComputation.h
         src/Impulse/NeuralNetwork/ComputationCpu.cpp
         src/Impulse/NeuralNetwork/ComputationCpu.h
-        main.cpp
-        )
+        src/Impulse/NeuralNetwork/Computation.cpp
+        src/Impulse/NeuralNetwork/Computation.h
+        main.cpp)

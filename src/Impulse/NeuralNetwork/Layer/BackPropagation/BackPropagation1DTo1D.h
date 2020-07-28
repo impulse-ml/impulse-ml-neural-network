@@ -13,9 +13,9 @@ namespace Impulse {
                     BackPropagation1DTo1D(Layer::LayerPointer layer, Layer::LayerPointer previousLayer);
 
                     Eigen::MatrixXd propagate(const Eigen::MatrixXd &input,
-                                             T_Size numberOfExamples,
-                                             double regularization,
-                                             const Eigen::MatrixXd &sigma);
+                                              T_Size numberOfExamples,
+                                              double regularization,
+                                              const Eigen::MatrixXd &sigma);
                 };
             }
         }

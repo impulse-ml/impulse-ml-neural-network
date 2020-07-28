@@ -28,9 +28,9 @@ namespace Impulse {
                     Abstract(Layer::LayerPointer layer, Layer::LayerPointer previousLayer);
 
                     virtual Eigen::MatrixXd propagate(const Eigen::MatrixXd &input,
-                                                     T_Size numberOfExamples,
-                                                     double regularization,
-                                                     const Eigen::MatrixXd &delta) = 0;
+                                                      T_Size numberOfExamples,
+                                                      double regularization,
+                                                      const Eigen::MatrixXd &delta) = 0;
                 };
             }
         }

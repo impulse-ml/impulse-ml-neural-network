@@ -22,8 +22,8 @@ namespace Impulse {
                 return TYPE_PURELIN;
             }
 
-            double Purelin::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
-                return ComputationCpu::factory().purelinLoss(output, predictions);
+            double Purelin::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
+                return Computation::factory().purelinLoss(output, predictions);
             }
 
             double Purelin::error(T_Size m) {

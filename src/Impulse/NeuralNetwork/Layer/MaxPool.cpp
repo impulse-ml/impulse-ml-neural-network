@@ -30,7 +30,8 @@ namespace Impulse {
 
             Eigen::MatrixXd MaxPool::forward(const Eigen::MatrixXd &input) {
                 this->Z = input;
-                Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(), input.cols());
+                Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(),
+                                       input.cols());
 
 #pragma omp parallel
 #pragma omp for
@@ -58,7 +59,7 @@ namespace Impulse {
                 return TYPE_MAXPOOL;
             }
 
-            double MaxPool::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
+            double MaxPool::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
                 static_assert("No loss for MAXPOOL layer.", "");
                 return 0.0;
             }

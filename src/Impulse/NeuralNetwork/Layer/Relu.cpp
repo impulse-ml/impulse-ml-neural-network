@@ -9,18 +9,18 @@ namespace Impulse {
             Relu::Relu() : Abstract1D() {};
 
             Eigen::MatrixXd Relu::activation(Eigen::MatrixXd &m) {
-                return ComputationCpu::factory().reluActivation(m);
+                return Computation::factory().reluActivation(m);
             }
 
             Eigen::MatrixXd Relu::derivative() {
-                return ComputationCpu::factory().reluDerivative(this->A);
+                return Computation::factory().reluDerivative(this->A);
             }
 
             const T_String Relu::getType() {
                 return TYPE_RELU;
             }
 
-            double Relu::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
+            double Relu::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
                 // TODO
                 return 0.0;
             }

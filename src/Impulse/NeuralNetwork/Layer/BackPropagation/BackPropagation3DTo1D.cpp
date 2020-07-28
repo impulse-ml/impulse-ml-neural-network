@@ -15,9 +15,9 @@ namespace Impulse {
                 }
 
                 Eigen::MatrixXd BackPropagation3DTo1D::propagate(const Eigen::MatrixXd &input,
-                                                                T_Size numberOfExamples,
-                                                                double regularization,
-                                                                const Eigen::MatrixXd &sigma) {
+                                                                 T_Size numberOfExamples,
+                                                                 double regularization,
+                                                                 const Eigen::MatrixXd &sigma) {
 
                     return sigma;
                 }

@@ -15,9 +15,9 @@ namespace Impulse {
                 }
 
                 Eigen::MatrixXd BackPropagation1DTo1D::propagate(const Eigen::MatrixXd &input,
-                                                                T_Size numberOfExamples,
-                                                                double regularization,
-                                                                const Eigen::MatrixXd &sigma) {
+                                                                 T_Size numberOfExamples,
+                                                                 double regularization,
+                                                                 const Eigen::MatrixXd &sigma) {
 
                     Eigen::MatrixXd previousActivations =
                             this->previousLayer == nullptr ? input : this->previousLayer->A;

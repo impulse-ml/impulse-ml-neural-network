@@ -23,6 +23,7 @@
 #include "Trainer/common.h"
 #include "AbstractComputation.h"
 #include "ComputationCpu.h"
+#include "Computation.h"
 #include "Layer/BackPropagation/Abstract.h"
 #include "Layer/BackPropagation/BackPropagation1DTo1D.h"
 #include "Layer/BackPropagation/BackPropagationToMaxPool.h"

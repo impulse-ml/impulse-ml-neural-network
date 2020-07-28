@@ -8,12 +8,12 @@ namespace Impulse {
 
     namespace NeuralNetwork {
 
-        class ComputationCpu : public AbstractComputation {
+        class Computation : public AbstractComputation {
         private:
-            explicit ComputationCpu();
+            explicit Computation();
 
         public:
-            static ComputationCpu factory();
+            static Computation factory();
 
             Eigen::MatrixXd forward(const Eigen::MatrixXd &, const Eigen::MatrixXd &, const Eigen::VectorXd &);
 

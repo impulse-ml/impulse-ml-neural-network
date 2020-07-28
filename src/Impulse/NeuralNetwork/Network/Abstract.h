@@ -22,9 +22,10 @@ namespace Impulse {
 
                 void addLayer(Layer::LayerPointer layer);
 
-                Eigen::MatrixXd forward(const Eigen::MatrixXd & input);
+                Eigen::MatrixXd forward(const Eigen::MatrixXd &input);
 
-                void backward(Eigen::MatrixXd & X, Eigen::MatrixXd & Y, Eigen::MatrixXd & predictions, double regularization);
+                void
+                backward(Eigen::MatrixXd &X, Eigen::MatrixXd &Y, Eigen::MatrixXd &predictions, double regularization);
 
                 T_Dimension getDimension();
 
@@ -36,9 +37,9 @@ namespace Impulse {
 
                 Eigen::VectorXd getRolledGradient();
 
-                void setRolledTheta(Eigen::VectorXd & theta);
+                void setRolledTheta(Eigen::VectorXd &theta);
 
-                double loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions);
+                double loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions);
 
                 double error(T_Size m);
 

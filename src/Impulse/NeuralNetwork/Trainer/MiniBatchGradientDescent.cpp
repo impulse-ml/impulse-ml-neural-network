@@ -46,13 +46,14 @@ namespace Impulse {
                                 continue;
                             }
 
-                            layer->W = ComputationCpu::factory().gradientDescent(layer->W, learningRate, layer->gW);
-                            layer->b = ComputationCpu::factory().gradientDescent(layer->b, learningRate, layer->gb);
+                            layer->W = Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
+                            layer->b = Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);
                         }
 
                         if (this->verbose) {
                             high_resolution_clock::time_point endIterationBatch = high_resolution_clock::now();
-                            auto durationBatch = duration_cast<milliseconds>(endIterationBatch - beginIterationBatch).count();
+                            auto durationBatch = duration_cast<milliseconds>(
+                                    endIterationBatch - beginIterationBatch).count();
                             std::cout << "Batch: " << (offset + 1) << "/" << ceil((double) numberOfExamples / batchSize)
                                       << " | Time: " << durationBatch << "ms"
                                       << std::endl;

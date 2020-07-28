@@ -11,11 +11,11 @@ namespace Impulse {
             void Abstract1D::configure() {
                 // initialize weights
                 this->W.resize(this->height, this->width);
-                this->W = ComputationCpu::factory().randomInit(this->W, this->width);
+                this->W = Computation::factory().randomInit(this->W, this->width);
 
                 // initialize bias
                 this->b.resize(this->height);
-                this->b = ComputationCpu::factory().randomInit(this->b, this->width);
+                this->b = Computation::factory().randomInit(this->b, this->width);
 
                 this->gW.resize(this->height, this->width);
                 this->gb.resize(this->height);

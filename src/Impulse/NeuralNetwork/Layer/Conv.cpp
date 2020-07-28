@@ -10,10 +10,10 @@ namespace Impulse {
 
             void Conv::configure() {
                 this->W.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->W = ComputationCpu::factory().randomInit(this->W, this->width * this->height * this->depth);
+                this->W = Computation::factory().randomInit(this->W, this->width * this->height * this->depth);
 
                 this->b.resize(this->numFilters, 1);
-                this->b = ComputationCpu::factory().staticInit(this->b, 0.01);
+                this->b = Computation::factory().staticInit(this->b, 0.01);
 
                 this->gW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
                 this->gb.resize(this->numFilters, 1);
@@ -22,18 +22,20 @@ namespace Impulse {
             Eigen::MatrixXd Conv::forward(const Eigen::MatrixXd &input) {
                 this->Z = input;
 
-                Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(), input.cols());
+                Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(),
+                                       input.cols());
 
 #pragma omp parallel
 #pragma omp for
                 for (T_Size i = 0; i < input.cols(); i++) {
                     Eigen::MatrixXd conv = Utils::im2col(input.col(i), this->depth,
-                                                        this->height, this->width,
-                                                        this->filterSize, this->filterSize,
-                                                        this->padding, this->padding,
-                                                        this->stride, this->stride);
+                                                         this->height, this->width,
+                                                         this->filterSize, this->filterSize,
+                                                         this->padding, this->padding,
+                                                         this->stride, this->stride);
 
-                    Eigen::MatrixXd tmp = ComputationCpu::factory().forward(this->W, conv, this->b).transpose(); // transpose for
+                    Eigen::MatrixXd tmp = Computation::factory().forward(this->W, conv,
+                                                                            this->b).transpose(); // transpose for
                     // rolling to vector
                     Eigen::Map<Eigen::VectorXd> tmp2(tmp.data(), tmp.size());
                     result.col(i) = tmp2;
@@ -88,18 +90,18 @@ namespace Impulse {
             }
 
             Eigen::MatrixXd Conv::activation(Eigen::MatrixXd &m) {
-                return ComputationCpu::factory().reluActivation(m);
+                return Computation::factory().reluActivation(m);
             }
 
             Eigen::MatrixXd Conv::derivative() {
-                return ComputationCpu::factory().reluDerivative(this->A);
+                return Computation::factory().reluDerivative(this->A);
             }
 
             const T_String Conv::getType() {
                 return TYPE_CONV;
             }
 
-            double Conv::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
+            double Conv::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
                 static_assert("No loss for CONV layer.", "");
                 return 0.0;
             }

@@ -28,7 +28,8 @@ namespace Impulse {
                 this->verboseStep = value;
             }
 
-            Impulse::NeuralNetwork::Trainer::CostGradientResult AbstractTrainer::cost(Impulse::Dataset::SlicedDataset &dataSet, bool rollGradient) {
+            Impulse::NeuralNetwork::Trainer::CostGradientResult
+            AbstractTrainer::cost(Impulse::Dataset::SlicedDataset &dataSet, bool rollGradient) {
                 T_Size batchSize = 100;
                 T_Size numberOfExamples = dataSet.getNumberOfExamples();
                 auto numBatches = (T_Size) ceil((double) numberOfExamples / (double) batchSize);

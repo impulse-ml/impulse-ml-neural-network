@@ -8,9 +8,13 @@ namespace Impulse {
 
             namespace BackPropagation {
 
-                BackPropagationToMaxPool::BackPropagationToMaxPool(Layer::LayerPointer layer, Layer::LayerPointer previousLayer) : Abstract(layer, previousLayer) {}
+                BackPropagationToMaxPool::BackPropagationToMaxPool(Layer::LayerPointer layer,
+                                                                   Layer::LayerPointer previousLayer) : Abstract(layer,
+                                                                                                                 previousLayer) {}
 
-                Eigen::MatrixXd BackPropagationToMaxPool::propagate(const Eigen::MatrixXd &input, T_Size numberOfExamples, double regularization, const Eigen::MatrixXd &sigma) {
+                Eigen::MatrixXd
+                BackPropagationToMaxPool::propagate(const Eigen::MatrixXd &input, T_Size numberOfExamples,
+                                                    double regularization, const Eigen::MatrixXd &sigma) {
 
                     auto *prevLayer = (Layer::MaxPool *) this->previousLayer.get();
                     Eigen::MatrixXd result(prevLayer->Z.rows(), prevLayer->Z.cols());
@@ -51,7 +55,8 @@ namespace Impulse {
                                         }
                                     }
 
-                                    result(inputOffset + (maxY * inputWidth) + maxX, m) = sigma(outputOffset + (h * outputWidth) + w, m);
+                                    result(inputOffset + (maxY * inputWidth) + maxX, m) = sigma(
+                                            outputOffset + (h * outputWidth) + w, m);
                                 }
                             }
                         }

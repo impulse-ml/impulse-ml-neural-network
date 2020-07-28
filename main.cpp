@@ -139,13 +139,12 @@ void test_conv_mnist() {
 
     Network::ConvNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatchGradientDescent trainer(net);
+    Trainer::ConjugateGradient trainer(net);
     trainer.setLearningIterations(10);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.1);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.4);
-    trainer.setBatchSize(50);
+    trainer.setLearningRate(0.1);
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
@@ -180,9 +179,6 @@ void test_mnist_minibatch_gradient_descent() {
     modifier2.applyToColumn(0);
 
     Builder::ClassifierBuilder builder({400});
-    /*builder.createLayer<Layer::Logistic>([](auto * layer) {
-        layer->setSize(500);
-    });*/
     builder.createLayer<Layer::Logistic>([](auto * layer) {
         layer->setSize(100);
     });
@@ -221,7 +217,7 @@ void test_mnist_minibatch_gradient_descent() {
 
 int main() {
     //test1();
-    //test_mnist_minibatch_gradient_descent();
-    test_conv_mnist();
+    test_mnist_minibatch_gradient_descent();
+    //test_conv_mnist();
     return 0;
 }
