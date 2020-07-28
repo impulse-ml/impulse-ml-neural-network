@@ -21,6 +21,8 @@
 #include "Math/common.h"
 #include "utils.h"
 #include "Trainer/common.h"
+#include "AbstractComputation.h"
+#include "ComputationCpu.h"
 #include "Layer/BackPropagation/Abstract.h"
 #include "Layer/BackPropagation/BackPropagation1DTo1D.h"
 #include "Layer/BackPropagation/BackPropagationToMaxPool.h"

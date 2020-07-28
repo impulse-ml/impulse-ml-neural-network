@@ -9,19 +9,11 @@ namespace Impulse {
             Relu::Relu() : Abstract1D() {};
 
             Eigen::MatrixXd Relu::activation(Eigen::MatrixXd &m) {
-                Eigen::MatrixXd result = m.unaryExpr([](const double x) {
-                    return std::max(0.0, x);
-                });
-                return result;
+                return ComputationCpu::factory().reluActivation(m);
             }
 
             Eigen::MatrixXd Relu::derivative() {
-                return this->A.unaryExpr([](const double x) {
-                    if (x < 0.0) {
-                        return 0.0;
-                    }
-                    return 1.0;
-                });
+                return ComputationCpu::factory().reluDerivative(this->A);
             }
 
             const T_String Relu::getType() {
@@ -34,7 +26,8 @@ namespace Impulse {
             }
 
             double Relu::error(T_Size m) {
-                return 0.0; // TODO
+                // TODO
+                return 0.0;
             }
         }
     }

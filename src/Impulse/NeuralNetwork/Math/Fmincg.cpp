@@ -66,7 +66,7 @@ namespace Impulse {
 
             Eigen::VectorXd Fmincg::minimize(
                     Trainer::StepFunction stepFunction,
-                    Eigen::VectorXd theta,
+                    Eigen::VectorXd & theta,
                     T_Size length,
                     bool verbose
             ) {

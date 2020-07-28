@@ -10,15 +10,10 @@ namespace Impulse {
 
             void Conv::configure() {
                 this->W.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->W.setRandom();
-                this->W = this->W.unaryExpr([this](const double x) {
-                    return x * sqrt(2.0 / (this->width * this->height * this->depth));
-                });
+                this->W = ComputationCpu::factory().randomInit(this->W, this->width * this->height * this->depth);
 
                 this->b.resize(this->numFilters, 1);
-                this->b = this->b.unaryExpr([](const double x) {
-                    return 0.01;
-                });
+                this->b = ComputationCpu::factory().staticInit(this->b, 0.01);
 
                 this->gW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
                 this->gb.resize(this->numFilters, 1);
@@ -38,7 +33,7 @@ namespace Impulse {
                                                         this->padding, this->padding,
                                                         this->stride, this->stride);
 
-                    Eigen::MatrixXd tmp = ((this->W * conv).colwise() + this->b).transpose(); // transpose for
+                    Eigen::MatrixXd tmp = ComputationCpu::factory().forward(this->W, conv, this->b).transpose(); // transpose for
                     // rolling to vector
                     Eigen::Map<Eigen::VectorXd> tmp2(tmp.data(), tmp.size());
                     result.col(i) = tmp2;
@@ -93,18 +88,11 @@ namespace Impulse {
             }
 
             Eigen::MatrixXd Conv::activation(Eigen::MatrixXd &m) {
-                return m.unaryExpr([](const double x) {
-                    return std::max(0.0, x); // TODO: set it; RELU by default
-                });
+                return ComputationCpu::factory().reluActivation(m);
             }
 
             Eigen::MatrixXd Conv::derivative() {
-                return this->A.unaryExpr([](const double x) { // TODO: derivative for RELU
-                    if (x > 0.0) {
-                        return 1.0;
-                    }
-                    return 0.0;
-                });
+                return ComputationCpu::factory().reluDerivative(this->A);
             }
 
             const T_String Conv::getType() {

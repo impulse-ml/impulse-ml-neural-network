@@ -38,13 +38,16 @@ namespace Impulse {
 
                 // calculate penalty
                 double penalty = 0.0;
+
+#pragma omp parallel
+#pragma omp for
                 for (T_Size i = 0; i < this->network.getSize(); i++) {
-                    penalty += this->network.getLayer(i)->W.unaryExpr([](const double x) {
-                        return pow(x, 2.0);
-                    }).sum();
+                    penalty += this->network.getLayer(i)->penalty();
                 }
 
                 // calculate cost from mini-batches
+#pragma omp parallel
+#pragma omp for
                 for (T_Size batch = 0, offset = 0; batch < numberOfExamples; batch += batchSize, offset++) {
                     Eigen::MatrixXd predictedOutput = this->network.forward(dataSet.getInput(offset, batchSize));
                     Eigen::MatrixXd correctOutput = dataSet.getOutput(offset, batchSize);

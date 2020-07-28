@@ -8,8 +8,8 @@ namespace Impulse {
 
             Abstract::Abstract() = default;
 
-            Eigen::MatrixXd Abstract::forward(const Eigen::MatrixXd &input) {
-                this->Z = (this->W * input).colwise() + this->b;
+            Eigen::MatrixXd Abstract::forward(const Eigen::MatrixXd & input) {
+                this->Z = ComputationCpu::factory().forward(this->W, input, b);
                 this->A = this->activation(this->Z);
                 return this->A;
             }
@@ -66,6 +66,10 @@ namespace Impulse {
 
             T_Size Abstract::getOutputDepth() {
                 return 1;
+            }
+
+            double Abstract::penalty() {
+                return ComputationCpu::factory().layerPenaltyMiniBatchGradientDescent(this->W);
             }
         }
     }

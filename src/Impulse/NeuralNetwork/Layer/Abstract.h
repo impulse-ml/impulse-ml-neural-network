@@ -182,6 +182,8 @@ namespace Impulse {
                  * Debug.
                  */
                 virtual void debug() {};
+
+                double penalty();
             };
         }
     }

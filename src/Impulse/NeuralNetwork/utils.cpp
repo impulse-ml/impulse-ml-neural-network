@@ -21,6 +21,7 @@ namespace Impulse {
                 Eigen::MatrixXd result(rows, cols);
                 result.setZero();
 
+#pragma omp parallel for collapse(2)
                 for (int boundingY = -pad_h;
                      boundingY + kernel_h <= height + pad_h;
                      boundingY += stride_h) {
@@ -58,6 +59,7 @@ namespace Impulse {
                 Eigen::MatrixXd result(resultWidth * resultHeight * resultDepth, 1);
                 result.setZero();
 
+#pragma omp parallel for collapse(3)
                 for (int boundingY = 0; boundingY + kernel_h <= height; boundingY += stride_h) {
                     for (int boundingX = 0; boundingX + kernel_w <= width; boundingX += stride_w) {
                         for (int channel = 0; channel < channels; channel++) {

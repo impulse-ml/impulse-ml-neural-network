@@ -113,4 +113,9 @@ add_executable(impulse_ml_neural_network
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/DatasetSample.h
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/include.h
         src/Vendor/json/src/json.hpp
-        main.cpp)
+        src/Impulse/NeuralNetwork/AbstractComputation.cpp
+        src/Impulse/NeuralNetwork/AbstractComputation.h
+        src/Impulse/NeuralNetwork/ComputationCpu.cpp
+        src/Impulse/NeuralNetwork/ComputationCpu.h
+        main.cpp
+        )

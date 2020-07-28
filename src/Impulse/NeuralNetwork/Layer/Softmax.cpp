@@ -9,17 +9,11 @@ namespace Impulse {
             Softmax::Softmax() : Abstract1D() {}
 
             Eigen::MatrixXd Softmax::activation(Eigen::MatrixXd &m) {
-                Eigen::MatrixXd t = m.unaryExpr([](const double x) {
-                    return exp(x);
-                });
-                Eigen::MatrixXd divider = t.colwise().sum().replicate(t.rows(), 1);
-                Eigen::MatrixXd result = t.array() / divider.array();
-                return result;
+                return ComputationCpu::factory().softmaxActivation(m);
             }
 
             Eigen::MatrixXd Softmax::derivative() {
-                // TODO
-                return Eigen::MatrixXd();
+                return ComputationCpu::factory().softmaxDerivative(this->A);
             }
 
             const T_String Softmax::getType() {
@@ -27,9 +21,7 @@ namespace Impulse {
             }
 
             double Softmax::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
-                Eigen::MatrixXd loss = (output.array() *
-                                       predictions.unaryExpr([](const double x) { return log(x); }).array());
-                return loss.sum();
+                return ComputationCpu::factory().softmaxLoss(output, predictions);
             }
 
             double Softmax::error(T_Size m) {

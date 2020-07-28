@@ -25,8 +25,7 @@ namespace Impulse {
                     T_Size outputHeight = prevLayer->getOutputHeight();
                     T_Size outputDepth = prevLayer->getOutputDepth();
 
-#pragma omp parallel
-#pragma omp for
+#pragma omp parallel for collapse(4)
                     for (T_Size m = 0; m < numberOfExamples; m++) {
                         for (T_Size c = 0; c < outputDepth; c++) {
                             for (T_Size h = 0; h < outputHeight; h++) {

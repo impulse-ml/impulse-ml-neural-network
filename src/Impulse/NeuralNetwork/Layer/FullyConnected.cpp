@@ -24,7 +24,11 @@ namespace Impulse {
                         this->height = layer->getOutputHeight();
                         this->depth = layer->getOutputDepth();
                         this->numFilters = layer->getOutputWidth() * layer->getOutputHeight() * layer->getOutputDepth();
+                    } else {
+                        static_assert("Invalid. Cannot fully connect with previous non maxpool layer.", "");
                     }
+                } else {
+                    static_assert("Invalid. Cannot fully connect with previous 2D layer.", "");
                 }
             }
 

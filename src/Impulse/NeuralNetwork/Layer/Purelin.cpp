@@ -23,10 +23,7 @@ namespace Impulse {
             }
 
             double Purelin::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
-                Eigen::MatrixXd loss = (predictions.array() - output.array()).unaryExpr([](const double x) {
-                    return pow(x, 2.0);
-                });
-                return loss.sum();
+                return ComputationCpu::factory().purelinLoss(output, predictions);
             }
 
             double Purelin::error(T_Size m) {
