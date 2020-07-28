@@ -111,7 +111,7 @@ namespace Impulse {
                 return TYPE_CONV;
             }
 
-            double Conv::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
+            double Conv::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 static_assert("No loss for CONV layer.", "");
                 return 0.0;
             }

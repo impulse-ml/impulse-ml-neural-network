@@ -22,7 +22,7 @@ namespace Impulse {
                 return TYPE_PURELIN;
             }
 
-            double Purelin::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
+            double Purelin::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 Eigen::MatrixXd loss = (predictions.array() - output.array()).unaryExpr([](const double x) {
                     return pow(x, 2.0);
                 });

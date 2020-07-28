@@ -37,7 +37,7 @@ namespace Impulse {
 
                 const T_String getType() override;
 
-                double loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) override;
+                double loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) override;
 
                 double error(T_Size m) override;
 

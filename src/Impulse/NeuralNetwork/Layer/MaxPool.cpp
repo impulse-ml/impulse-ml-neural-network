@@ -58,7 +58,7 @@ namespace Impulse {
                 return TYPE_MAXPOOL;
             }
 
-            double MaxPool::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
+            double MaxPool::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 static_assert("No loss for MAXPOOL layer.", "");
                 return 0.0;
             }

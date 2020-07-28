@@ -26,7 +26,7 @@ namespace Impulse {
                 return TYPE_SOFTMAX;
             }
 
-            double Softmax::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
+            double Softmax::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 Eigen::MatrixXd loss = (output.array() *
                                        predictions.unaryExpr([](const double x) { return log(x); }).array());
                 return loss.sum();

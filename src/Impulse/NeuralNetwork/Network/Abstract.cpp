@@ -130,7 +130,7 @@ namespace Impulse {
             }
 
             double Abstract::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
-                return this->layers.at(this->getSize() - 1)->loss(std::move(output), std::move(predictions));
+                return this->layers.at(this->getSize() - 1)->loss(output, predictions);
             }
 
             double Abstract::error(T_Size m) {

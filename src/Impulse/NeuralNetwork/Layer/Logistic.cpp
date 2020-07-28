@@ -22,7 +22,7 @@ namespace Impulse {
                 return TYPE_LOGISTIC;
             }
 
-            double Logistic::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
+            double Logistic::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 Eigen::MatrixXd loss =
                         (output.array() * predictions.unaryExpr([](const double x) { return log(x); }).array())
                         +

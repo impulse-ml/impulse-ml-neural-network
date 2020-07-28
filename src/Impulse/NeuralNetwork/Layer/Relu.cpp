@@ -28,7 +28,7 @@ namespace Impulse {
                 return TYPE_RELU;
             }
 
-            double Relu::loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) {
+            double Relu::loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) {
                 // TODO
                 return 0.0;
             }

@@ -147,7 +147,7 @@ namespace Impulse {
                  * @param predictions
                  * @return
                  */
-                virtual double loss(Eigen::MatrixXd output, Eigen::MatrixXd predictions) = 0;
+                virtual double loss(Eigen::MatrixXd & output, Eigen::MatrixXd & predictions) = 0;
 
                 /**
                  * Error term for network.
