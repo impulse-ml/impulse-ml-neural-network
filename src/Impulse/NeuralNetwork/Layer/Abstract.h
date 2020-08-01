@@ -32,6 +32,10 @@ namespace Impulse {
                 Eigen::MatrixXd Z;                                                       // output of the layer before activation
                 Eigen::MatrixXd gW;                                                      // gradient for weights
                 Eigen::VectorXd gb;                                                      // gradient for biases
+                Eigen::MatrixXd sW;                                                      // for adam optimization
+                Eigen::VectorXd sB;                                                      // for adam optimization
+                Eigen::MatrixXd vW;                                                      // for adam optimization
+                Eigen::VectorXd vB;
                 BackPropagation::BackPropagationPointer backpropagation = nullptr;      // pointer to the backpropagation algorithm
                 /**
                  * Pure constructor

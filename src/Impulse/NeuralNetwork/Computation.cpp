@@ -66,16 +66,26 @@ namespace Impulse {
             return ComputationCpu::factory().softmaxLoss(output, predictions);
         }
 
-        Eigen::MatrixXd Computation::gradientDescent(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW) {
-            return ComputationCpu::factory().gradientDescent(W, learningRate, gW);
+        void Computation::gradientDescent(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW) {
+            ComputationCpu::factory().gradientDescent(W, learningRate, gW);
         }
 
-        Eigen::VectorXd Computation::gradientDescent(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb) {
-            return ComputationCpu::factory().gradientDescent(b, learningRate, gb);
+        void Computation::gradientDescent(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb) {
+            ComputationCpu::factory().gradientDescent(b, learningRate, gb);
         }
 
         double Computation::layerPenaltyMiniBatchGradientDescent(Eigen::MatrixXd &W) {
             return ComputationCpu::factory().layerPenaltyMiniBatchGradientDescent(W);
+        }
+
+        void Computation::gradientAdam(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW, Eigen::MatrixXd &s,
+                                       Eigen::MatrixXd &v, T_Size t) {
+            ComputationCpu::factory().gradientAdam(W, learningRate, gW, s, v, t);
+        }
+
+        void Computation::gradientAdam(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb, Eigen::VectorXd &s,
+                                       Eigen::VectorXd &v, T_Size t) {
+            ComputationCpu::factory().gradientAdam(b, learningRate, gb, s, v, t);
         }
     }
 }

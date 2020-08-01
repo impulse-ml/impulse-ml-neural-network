@@ -33,8 +33,8 @@ namespace Impulse {
                             continue;
                         }
 
-                        layer->W = Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
-                        layer->b = Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);
+                        Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
+                        Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);
                     }
 
                     Trainer::CostGradientResult currentResult = this->cost(dataSet);

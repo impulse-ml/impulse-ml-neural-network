@@ -101,18 +101,62 @@ namespace Impulse {
             return loss.sum();
         }
 
-        Eigen::MatrixXd ComputationCpu::gradientDescent(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW) {
-            return W.array() - learningRate * gW.array();
+        void ComputationCpu::gradientDescent(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW) {
+            W = W.array() - learningRate * gW.array();
         }
 
-        Eigen::VectorXd ComputationCpu::gradientDescent(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb) {
-            return b.array() - learningRate * gb.array();
+        void ComputationCpu::gradientDescent(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb) {
+            b = b.array() - learningRate * gb.array();
         }
 
         double ComputationCpu::layerPenaltyMiniBatchGradientDescent(Eigen::MatrixXd &W) {
             return W.unaryExpr([](const double x) {
                 return pow(x, 2.0);
             }).sum();
+        }
+
+        void
+        ComputationCpu::gradientAdam(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW, Eigen::MatrixXd &s,
+                                     Eigen::MatrixXd &v, T_Size t) {
+            double beta1 = 0.9;
+            double beta2 = 0.999;
+            double epsilon = 1e-8;
+
+            v = beta1 * v + (1 - beta1) * gW;
+            Eigen::MatrixXd wCorrected = v / (1 - std::pow(beta1, t));
+
+            s = beta2 * s + (1 - beta2) * gW.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            });
+
+            Eigen::MatrixXd sCorrected = s / (1 - std::pow(beta2, t));
+            sCorrected = sCorrected.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            });
+
+            W = W.array() - learningRate * (wCorrected.array() / sCorrected.array());
+        }
+
+        void
+        ComputationCpu::gradientAdam(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb, Eigen::VectorXd &s,
+                                     Eigen::VectorXd &v, T_Size t) {
+            double beta1 = 0.9;
+            double beta2 = 0.999;
+            double epsilon = 1e-8;
+
+            v = beta1 * v + (1 - beta1) * gb;
+            Eigen::MatrixXd wCorrected = v / (1 - std::pow(beta1, t));
+
+            s = beta2 * s + (1 - beta2) * gb.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            });
+
+            Eigen::MatrixXd sCorrected = s / (1 - std::pow(beta2, t));
+            sCorrected = sCorrected.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            });
+
+            b = b.array() - learningRate * (wCorrected.array() / sCorrected.array());
         }
     }
 }

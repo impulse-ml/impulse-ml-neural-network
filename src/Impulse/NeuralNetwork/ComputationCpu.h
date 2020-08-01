@@ -41,11 +41,17 @@ namespace Impulse {
 
             double softmaxLoss(Eigen::MatrixXd &, Eigen::MatrixXd &);
 
-            Eigen::MatrixXd gradientDescent(Eigen::MatrixXd &, double, Eigen::MatrixXd &);
+            void gradientDescent(Eigen::MatrixXd &, double, Eigen::MatrixXd &);
 
-            Eigen::VectorXd gradientDescent(Eigen::VectorXd &, double, Eigen::VectorXd &);
+            void gradientDescent(Eigen::VectorXd &, double, Eigen::VectorXd &);
 
             double layerPenaltyMiniBatchGradientDescent(Eigen::MatrixXd &);
+
+            void
+            gradientAdam(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+
+            void
+            gradientAdam(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
         };
     }
 }

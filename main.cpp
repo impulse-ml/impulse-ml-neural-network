@@ -192,11 +192,12 @@ void test_mnist_minibatch_gradient_descent() {
     Network::ClassifierNetwork net = builder.getNetwork();
 
     Trainer::MiniBatchGradientDescent trainer(net);
-    trainer.setLearningIterations(90);
+    trainer.setLearningIterations(15);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.0);
     trainer.setVerbose(true);
     trainer.setLearningRate(0.05);
+    trainer.setOptimizer("adam"); // you can comment this out
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;

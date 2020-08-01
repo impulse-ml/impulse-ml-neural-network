@@ -22,10 +22,7 @@ namespace Impulse {
                 auto numberOfExamples = (T_Size) dataSet.getInput().cols();
                 high_resolution_clock::time_point beginTrain = high_resolution_clock::now();
 
-                // TODO
-                double beta1 = this->beta1;
-                double beta2 = this->beta2;
-                double epsilon = this->epsilon;
+                T_Size t = 0;
 
                 for (T_Size i = 0; i < iterations; i++) {
                     high_resolution_clock::time_point beginIteration = high_resolution_clock::now();
@@ -46,8 +43,16 @@ namespace Impulse {
                                 continue;
                             }
 
-                            layer->W = Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
-                            layer->b = Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);
+                            if (this->optimizer == "adam") {
+                                t += 1;
+                                Computation::factory().gradientAdam(layer->W, learningRate, layer->gW, layer->sW,
+                                                                    layer->vW, t);
+                                Computation::factory().gradientAdam(layer->b, learningRate, layer->gb, layer->sB,
+                                                                    layer->vB, t);
+                            } else {
+                                Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
+                                Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);
+                            }
                         }
 
                         if (this->verbose) {
@@ -80,6 +85,10 @@ namespace Impulse {
                     auto duration = duration_cast<seconds>(endTrain - beginTrain).count();
                     std::cout << "Training end. " << duration << "s" << std::endl;
                 }
+            }
+
+            void MiniBatchGradientDescent::setOptimizer(T_String optimizer) {
+                this->optimizer = optimizer;
             }
         }
     }

@@ -35,7 +35,7 @@ namespace Impulse {
                                                          this->stride, this->stride);
 
                     Eigen::MatrixXd tmp = Computation::factory().forward(this->W, conv,
-                                                                            this->b).transpose(); // transpose for
+                                                                         this->b).transpose(); // transpose for
                     // rolling to vector
                     Eigen::Map<Eigen::VectorXd> tmp2(tmp.data(), tmp.size());
                     result.col(i) = tmp2;
