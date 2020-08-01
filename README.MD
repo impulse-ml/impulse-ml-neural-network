@@ -1,8 +1,8 @@
-#impulse-ml-neural-network
+# impulse-ml-neural-network
 
 ### When the neural network coding is easy.
 
-This is a neural classifier with convolutional layers option (not vectorized yet).
+This is a neural classifier with convolutional layers option (which are not vectorized yet).
 
 ## Minimal classifier example
 
@@ -83,6 +83,12 @@ As you see layers and be configured with size so the builder also.
 ```c++
     Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
     Network::ConvNetwork network = builder.getNetwork();
+```
+
+###### Forward propagation.
+
+```c++
+    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 ```
 
 ## Author

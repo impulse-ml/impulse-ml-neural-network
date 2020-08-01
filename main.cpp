@@ -239,8 +239,8 @@ void test_mnist_minibatch_gradient_descent_restore() {
 
 int main() {
     //test1();
-    //test_mnist_minibatch_gradient_descent();
-    test_mnist_minibatch_gradient_descent_restore();
+    test_mnist_minibatch_gradient_descent();
+    //test_mnist_minibatch_gradient_descent_restore();
     //test_conv_mnist();
     return 0;
 }
