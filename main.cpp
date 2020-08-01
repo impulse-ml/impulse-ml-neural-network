@@ -178,7 +178,7 @@ void test_mnist_minibatch_gradient_descent() {
     Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
     modifier2.applyToColumn(0);
 
-    Builder::ClassifierBuilder builder({400});
+    Builder::ClassifierBuilder builder({28*28});
     builder.createLayer<Layer::Logistic>([](auto * layer) {
         layer->setSize(100);
     });
@@ -192,11 +192,11 @@ void test_mnist_minibatch_gradient_descent() {
     Network::ClassifierNetwork net = builder.getNetwork();
 
     Trainer::MiniBatchGradientDescent trainer(net);
-    trainer.setLearningIterations(15);
+    trainer.setLearningIterations(30);
     trainer.setVerboseStep(1);
-    trainer.setRegularization(0.0);
+    trainer.setRegularization(0.01);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.05);
+    trainer.setLearningRate(0.01);
     trainer.setOptimizer("adam"); // you can comment this out
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
@@ -216,9 +216,31 @@ void test_mnist_minibatch_gradient_descent() {
     serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
 }
 
+void test_mnist_minibatch_gradient_descent_restore() {
+    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
+    Network::ConvNetwork network = builder.getNetwork();
+
+    Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
+            "/home/user/impulse-ml-neural-network/data/mnist_test_1000.csv");
+    Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
+    Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
+    slicer.addOutputColumn(0);
+    for (int i = 0; i < 28 * 28; i++) {
+        slicer.addInputColumn(i + 1);
+    }
+
+    Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
+
+    Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
+    modifier2.applyToColumn(0);
+
+    std::cout << network.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+}
+
 int main() {
     //test1();
-    test_mnist_minibatch_gradient_descent();
+    //test_mnist_minibatch_gradient_descent();
+    test_mnist_minibatch_gradient_descent_restore();
     //test_conv_mnist();
     return 0;
 }
