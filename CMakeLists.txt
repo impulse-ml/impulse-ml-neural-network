@@ -59,6 +59,8 @@ add_executable(impulse_ml_neural_network
         src/Impulse/NeuralNetwork/Layer/Relu.h
         src/Impulse/NeuralNetwork/Layer/Softmax.cpp
         src/Impulse/NeuralNetwork/Layer/Softmax.h
+        src/Impulse/NeuralNetwork/Layer/Softplus.cpp
+        src/Impulse/NeuralNetwork/Layer/Softplus.h
         src/Impulse/NeuralNetwork/Layer/Tanh.cpp
         src/Impulse/NeuralNetwork/Layer/Tanh.h
         src/Impulse/NeuralNetwork/Math/common.cpp

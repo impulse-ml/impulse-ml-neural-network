@@ -20,6 +20,7 @@
 #include <experimental/filesystem>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
+#include <zconf.h>
 
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/include.h"
 #include "src/Impulse/NeuralNetwork/include.h"
@@ -175,6 +176,9 @@ void test_mnist_minibatch_gradient_descent() {
 
     Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
 
+    Impulse::Dataset::DatasetModifier::Modifier::MinMaxScaling modifier3(slicedDataset.input);
+    modifier3.apply();
+
     Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
     modifier2.applyToColumn(0);
 
@@ -192,7 +196,7 @@ void test_mnist_minibatch_gradient_descent() {
     Network::ClassifierNetwork net = builder.getNetwork();
 
     Trainer::MiniBatchGradientDescent trainer(net);
-    trainer.setLearningIterations(5);
+    trainer.setLearningIterations(4);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.01);
     trainer.setVerbose(true);
@@ -201,6 +205,7 @@ void test_mnist_minibatch_gradient_descent() {
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
+    std::cout << "Accuracy: " << cost.getAccuracy() << std::endl;
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
@@ -213,8 +218,9 @@ void test_mnist_minibatch_gradient_descent() {
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
     high_resolution_clock::time_point t4 = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(t4 - t3).count();
-    std::cout << "Forward time: " << duration2 << " microsends." << std::endl;
+    std::cout << "Forward time: " << duration2 << " microseconds." << std::endl;
     std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
+    std::cout << "Accuracy: " << trainer.cost(slicedDataset).getAccuracy() << "%" << std::endl;
 
     Serializer serializer(net);
     serializer.toJSON("../saved/test_mnist_minibatch_gradient_descent.json");
@@ -247,8 +253,8 @@ void test_mnist_minibatch_gradient_descent_restore() {
 
 int main() {
     //test1();
-    //test_mnist_minibatch_gradient_descent();
-    test_mnist_minibatch_gradient_descent_restore();
+    test_mnist_minibatch_gradient_descent();
+    //test_mnist_minibatch_gradient_descent_restore();
     //test_conv_mnist();
     return 0;
 }

@@ -87,7 +87,7 @@ As you see layers and be configured with size so the builder also.
     Network::ConvNetwork network = builder.getNetwork();
 ```
 
- Forward propagation.
+##### Forward propagation.
 
 ```c++
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
@@ -103,6 +103,7 @@ Layer::MaxPool          // in ConvBuiler only
 Layer::Purelin
 Layer::Relu
 Layer::Softmax          // must be last
+Layer::Softplus
 Layer::Tanh
 ```
 

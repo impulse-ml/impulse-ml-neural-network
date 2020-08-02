@@ -48,6 +48,7 @@
 #include "Layer/Conv.h"
 #include "Layer/MaxPool.h"
 #include "Layer/FullyConnected.h"
+#include "Layer/Softplus.h"
 #include "Math/Fmincg.h"
 #include "Trainer/Abstract.h"
 #include "Trainer/ConjugateGradient.h"

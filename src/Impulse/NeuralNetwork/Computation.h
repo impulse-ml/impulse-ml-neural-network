@@ -35,6 +35,10 @@ namespace Impulse {
 
             Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd &);
 
+            Eigen::MatrixXd softplusActivation(Eigen::MatrixXd &);
+
+            Eigen::MatrixXd softplusDerivative(Eigen::MatrixXd &);
+
             Eigen::MatrixXd tanhActivation(Eigen::MatrixXd &);
 
             Eigen::MatrixXd tanhDerivative(Eigen::MatrixXd &);

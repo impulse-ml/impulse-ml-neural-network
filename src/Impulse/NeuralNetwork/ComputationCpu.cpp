@@ -56,7 +56,7 @@ namespace Impulse {
 
         Eigen::MatrixXd ComputationCpu::logisticActivation(Eigen::MatrixXd &m) {
             return m.unaryExpr([](const double x) {
-                return 1.0 / (1.0 + exp(-x));
+                return 1.0 / (1.0 + std::exp(-x));
             });
         }
 
@@ -77,16 +77,30 @@ namespace Impulse {
             return Eigen::MatrixXd(); // TODO
         }
 
+        Eigen::MatrixXd ComputationCpu::softplusActivation(Eigen::MatrixXd &m) {
+            Eigen::MatrixXd result = m.unaryExpr([](const double x) {
+                return std::log(1.0 + std::exp(x));
+            });
+            return result;
+        }
+
+        Eigen::MatrixXd ComputationCpu::softplusDerivative(Eigen::MatrixXd &m) {
+            Eigen::MatrixXd result = m.unaryExpr([](const double x) {
+                return (1.0 / (1.0 + std::exp(-x)));
+            });
+            return result;
+        }
+
         Eigen::MatrixXd ComputationCpu::tanhActivation(Eigen::MatrixXd &m) {
             Eigen::MatrixXd result = m.unaryExpr([](const double x) {
-                return (2 / (1 + std::exp(-2 * x))) - 1;
+                return (2.0 / (1.0 + std::exp(-2.0 * x))) - 1;
             });
             return result;
         }
 
         Eigen::MatrixXd ComputationCpu::tanhDerivative(Eigen::MatrixXd &m) {
             Eigen::MatrixXd result = m.unaryExpr([](const double x) {
-                return 1 - std::pow((2 / (1 + std::exp(-2 * x))) - 1, 2);
+                return 1.0 - std::pow((2.0 / (1.0 + std::exp(-2.0 * x))) - 1.0, 2);
             });
             return result;
         }

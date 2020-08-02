@@ -61,6 +61,10 @@ namespace Impulse {
                     std::function<void(Layer::Softmax *)> callback);
 
             template void
+            Abstract<Network::ClassifierNetwork>::createLayer<Layer::Softplus>(
+                    std::function<void(Layer::Softplus *)> callback);
+
+            template void
             Abstract<Network::ConvNetwork>::createLayer<Layer::Conv>(
                     std::function<void(Layer::Conv *)> callback);
 
@@ -75,6 +79,10 @@ namespace Impulse {
             template void
             Abstract<Network::ConvNetwork>::createLayer<Layer::Softmax>(
                     std::function<void(Layer::Softmax *)> callback);
+
+            template void
+            Abstract<Network::ConvNetwork>::createLayer<Layer::Softplus>(
+                    std::function<void(Layer::Softplus *)> callback);
 
             template void
             Abstract<Network::ConvNetwork>::createLayer<Layer::Logistic>(

@@ -54,6 +54,14 @@ namespace Impulse {
             return ComputationCpu::factory().softmaxDerivative(m);
         }
 
+        Eigen::MatrixXd Computation::softplusActivation(Eigen::MatrixXd &m) {
+            return ComputationCpu::factory().softplusActivation(m);
+        }
+
+        Eigen::MatrixXd Computation::softplusDerivative(Eigen::MatrixXd &m) {
+            return ComputationCpu::factory().softplusDerivative(m);
+        }
+
         Eigen::MatrixXd Computation::tanhActivation(Eigen::MatrixXd &m) {
             return ComputationCpu::factory().tanhActivation(m);
         }
