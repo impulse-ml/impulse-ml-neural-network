@@ -3,6 +3,9 @@ project(impulse_ml_neural_network)
 
 set(CMAKE_CXX_STANDARD 14)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS} -O3 -mavx -march=corei7")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
 include_directories(src/Impulse/NeuralNetwork)
 include_directories(src/Impulse/NeuralNetwork/Builder)
 include_directories(src/Impulse/NeuralNetwork/Layer)
@@ -56,6 +59,8 @@ add_executable(impulse_ml_neural_network
         src/Impulse/NeuralNetwork/Layer/Relu.h
         src/Impulse/NeuralNetwork/Layer/Softmax.cpp
         src/Impulse/NeuralNetwork/Layer/Softmax.h
+        src/Impulse/NeuralNetwork/Layer/Tanh.cpp
+        src/Impulse/NeuralNetwork/Layer/Tanh.h
         src/Impulse/NeuralNetwork/Math/common.cpp
         src/Impulse/NeuralNetwork/Math/common.h
         src/Impulse/NeuralNetwork/Math/Fmincg.cpp

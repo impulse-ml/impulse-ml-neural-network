@@ -77,6 +77,20 @@ namespace Impulse {
             return Eigen::MatrixXd(); // TODO
         }
 
+        Eigen::MatrixXd ComputationCpu::tanhActivation(Eigen::MatrixXd &m) {
+            Eigen::MatrixXd result = m.unaryExpr([](const double x) {
+                return (2 / (1 + std::exp(-2 * x))) - 1;
+            });
+            return result;
+        }
+
+        Eigen::MatrixXd ComputationCpu::tanhDerivative(Eigen::MatrixXd &m) {
+            Eigen::MatrixXd result = m.unaryExpr([](const double x) {
+                return 1 - std::pow((2 / (1 + std::exp(-2 * x))) - 1, 2);
+            });
+            return result;
+        }
+
         double ComputationCpu::logisticLoss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
             Eigen::MatrixXd loss =
                     (output.array() * predictions.unaryExpr([](const double x) { return log(x); }).array())

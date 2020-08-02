@@ -81,12 +81,12 @@ void test1() {
     std::cout << "Cost: " << trainer.cost(dataset).getCost() << std::endl;
 
     Serializer serializer(net);
-    serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test1.json");
+    serializer.toJSON("../saved/test1.json");
 }
 
 void test_conv_mnist() {
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-            "/home/user/impulse-ml-neural-network/data/mnist_test_1000.csv");
+            "../data/mnist_test_1000.csv");
     Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
     Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
     slicer.addOutputColumn(0);
@@ -160,12 +160,12 @@ void test_conv_mnist() {
     std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
 
     Serializer serializer(net);
-    serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test_conv_mnist.json");
+    serializer.toJSON("../saved/test_conv_mnist.json");
 }
 
 void test_mnist_minibatch_gradient_descent() {
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-            "/home/user/impulse-ml-neural-network/data/mnist_test_1000.csv");
+            "../data/mnist_test_1000.csv");
     Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
     Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
     slicer.addOutputColumn(0);
@@ -179,10 +179,10 @@ void test_mnist_minibatch_gradient_descent() {
     modifier2.applyToColumn(0);
 
     Builder::ClassifierBuilder builder({28*28});
-    builder.createLayer<Layer::Logistic>([](auto * layer) {
+    builder.createLayer<Layer::Tanh>([](auto * layer) {
         layer->setSize(100);
     });
-    builder.createLayer<Layer::Logistic>([](auto * layer) {
+    builder.createLayer<Layer::Tanh>([](auto * layer) {
         layer->setSize(20);
     });
     builder.createLayer<Layer::Softmax>([](auto * layer) {
@@ -192,11 +192,11 @@ void test_mnist_minibatch_gradient_descent() {
     Network::ClassifierNetwork net = builder.getNetwork();
 
     Trainer::MiniBatchGradientDescent trainer(net);
-    trainer.setLearningIterations(30);
+    trainer.setLearningIterations(5);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.01);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.01);
+    trainer.setLearningRate(0.005);
     trainer.setOptimizer("adam"); // you can comment this out
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
@@ -213,15 +213,15 @@ void test_mnist_minibatch_gradient_descent() {
     std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
 
     Serializer serializer(net);
-    serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
+    serializer.toJSON("../saved/test_mnist_minibatch_gradient_descent.json");
 }
 
 void test_mnist_minibatch_gradient_descent_restore() {
-    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
+    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
     Network::ConvNetwork network = builder.getNetwork();
 
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-            "/home/user/impulse-ml-neural-network/data/mnist_test_1000.csv");
+            "../data/mnist_test_1000.csv");
     Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
     Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
     slicer.addOutputColumn(0);

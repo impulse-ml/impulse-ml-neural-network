@@ -10,7 +10,7 @@ This is a neural classifier with convolutional layers option (which are not vect
 
 ```c++
        Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-               "/home/user/impulse-ml-neural-network/data/mnist_test_1000.csv");
+               "../data/mnist_test_1000.csv");
        Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
        Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
        slicer.addOutputColumn(0);
@@ -75,13 +75,13 @@ As you see layers and be configured with size so the builder also.
 
 ```c++
     Serializer serializer(net);
-    serializer.toJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
+    serializer.toJSON("../saved/test_mnist_minibatch_gradient_descent.json");
 ```
 
 ###### Restore trained network from file.
 
 ```c++
-    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("/home/user/impulse-ml-neural-network/saved/test_mnist_minibatch_gradient_descent.json");
+    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
     Network::ConvNetwork network = builder.getNetwork();
 ```
 
@@ -93,4 +93,6 @@ As you see layers and be configured with size so the builder also.
 
 ## Author
 
-Michał Baniowski (banit.pl)
+Michał Baniowski
+
+[banit.pl](https://banit.pl)

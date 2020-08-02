@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
             Dataset dataset = builder.build();
 
             if (cmdOptionExists(argv, argv + argc, "--modifier") && cmdOptionExists(argv, argv + argc, "--columns")) {
-                char * modifier = getCmdOption(argv, argv + argc, "--modifier");
-                char * columns = getCmdOption(argv, argv + argc, "--columns");
+                char *modifier = getCmdOption(argv, argv + argc, "--modifier");
+                char *columns = getCmdOption(argv, argv + argc, "--columns");
 
                 if (modifier && columns) {
                     std::stringstream test(columns);

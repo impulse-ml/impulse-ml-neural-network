@@ -33,7 +33,8 @@ namespace Impulse {
                 T_StringVector fields{""};
                 T_Size i = 0; // index of the current field
 
-                line.erase(std::find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), line.end());
+                line.erase(std::find_if(line.rbegin(), line.rend(),
+                                        std::not1(std::ptr_fun<int, int>(std::isspace))).base(), line.end());
 
                 for (char c : line) {
                     switch (state) {

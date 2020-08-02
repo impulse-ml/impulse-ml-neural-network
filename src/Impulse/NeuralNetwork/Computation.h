@@ -35,6 +35,10 @@ namespace Impulse {
 
             Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd &);
 
+            Eigen::MatrixXd tanhActivation(Eigen::MatrixXd &);
+
+            Eigen::MatrixXd tanhDerivative(Eigen::MatrixXd &);
+
             double logisticLoss(Eigen::MatrixXd &, Eigen::MatrixXd &);
 
             double purelinLoss(Eigen::MatrixXd &, Eigen::MatrixXd &);

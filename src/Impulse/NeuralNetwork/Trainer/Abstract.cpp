@@ -78,7 +78,7 @@ namespace Impulse {
 
                 Impulse::NeuralNetwork::Trainer::CostGradientResult result;
                 result.cost = cost;
-                result.accuracy = accuracy / (double) numberOfExamples * 100.0;
+                result.accuracy = (accuracy - 1) / (double) numberOfExamples * 100.0;
                 if (rollGradient) {
                     result.gradient = this->network.getRolledGradient();
                 }

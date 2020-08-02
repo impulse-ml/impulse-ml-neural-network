@@ -40,6 +40,7 @@
 #include "Builder/ClassifierBuilder.h"
 #include "Builder/ConvBuilder.h"
 #include "Serializer.h"
+#include "Layer/Tanh.h"
 #include "Layer/Softmax.h"
 #include "Layer/Relu.h"
 #include "Layer/Logistic.h"

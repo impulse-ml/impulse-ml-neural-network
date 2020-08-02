@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
             Dataset dataset = builder.build();
 
             if (cmdOptionExists(argv, argv + argc, "--ratio")) {
-                char * ratio = getCmdOption(argv, argv + argc, "--ratio");
+                char *ratio = getCmdOption(argv, argv + argc, "--ratio");
 
                 if (ratio) {
                     // slice dataset to input and output set
@@ -120,21 +120,26 @@ int main(int argc, char *argv[]) {
 
                         if (filenameOut) {
                             DatasetExporter exporter(splitDataset.primary);
-                            exporter.exportToFile(T_String(filenameOut).append("/").append(filename).append(".PRIMARY.csv"));
+                            exporter.exportToFile(
+                                    T_String(filenameOut).append("/").append(filename).append(".PRIMARY.csv"));
 
                             DatasetExporter exporter2(splitDataset.secondary);
-                            exporter2.exportToFile(T_String(filenameOut).append("/").append(filename).append(".SECONDARY.csv"));
+                            exporter2.exportToFile(
+                                    T_String(filenameOut).append("/").append(filename).append(".SECONDARY.csv"));
                         }
 
                         if (cmdOptionExists(argv, argv + argc, "-v")) {
                             std::cout << "INPUT: " << std::endl;
                             std::cout << std::endl << "Number of rows: " << splitDataset.primary.getSize() << std::endl;
-                            std::cout << "Number of cols: " << splitDataset.primary.getColumnsSize() << std::endl << "---"
+                            std::cout << "Number of cols: " << splitDataset.primary.getColumnsSize() << std::endl
+                                      << "---"
                                       << std::endl;
                             splitDataset.primary.out();
                             std::cout << "OUTPUT: " << std::endl;
-                            std::cout << std::endl << "Number of rows: " << splitDataset.secondary.getSize() << std::endl;
-                            std::cout << "Number of cols: " << splitDataset.secondary.getColumnsSize() << std::endl << "---"
+                            std::cout << std::endl << "Number of rows: " << splitDataset.secondary.getSize()
+                                      << std::endl;
+                            std::cout << "Number of cols: " << splitDataset.secondary.getColumnsSize() << std::endl
+                                      << "---"
                                       << std::endl;
                             splitDataset.secondary.out();
                         }

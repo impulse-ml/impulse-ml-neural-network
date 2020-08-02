@@ -53,6 +53,10 @@ namespace Impulse {
                     std::function<void(Layer::Relu *)> callback);
 
             template void
+            Abstract<Network::ClassifierNetwork>::createLayer<Layer::Tanh>(
+                    std::function<void(Layer::Tanh *)> callback);
+
+            template void
             Abstract<Network::ClassifierNetwork>::createLayer<Layer::Softmax>(
                     std::function<void(Layer::Softmax *)> callback);
 

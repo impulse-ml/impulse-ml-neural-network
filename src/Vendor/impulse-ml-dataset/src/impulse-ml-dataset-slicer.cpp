@@ -60,7 +60,8 @@ int main(int argc, char *argv[]) {
                         exporter.exportToFile(T_String(filenameOut).append("/").append(filename).append(".INPUT.csv"));
 
                         DatasetExporter exporter2(_dataset.output);
-                        exporter2.exportToFile(T_String(filenameOut).append("/").append(filename).append(".OUTPUT.csv"));
+                        exporter2.exportToFile(
+                                T_String(filenameOut).append("/").append(filename).append(".OUTPUT.csv"));
                     }
 
                     if (cmdOptionExists(argv, argv + argc, "-v")) {

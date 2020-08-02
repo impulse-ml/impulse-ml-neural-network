@@ -31,7 +31,8 @@ namespace Impulse {
                 } else if (layer->getType() == Layer::TYPE_LOGISTIC ||
                            layer->getType() == Layer::TYPE_PURELIN ||
                            layer->getType() == Layer::TYPE_RELU ||
-                           layer->getType() == Layer::TYPE_SOFTMAX) {
+                           layer->getType() == Layer::TYPE_SOFTMAX ||
+                           layer->getType() == Layer::TYPE_TANH) {
                     result["layers"][i]["size"] = layer->getSize();
                 } else if (layer->getType() == Layer::TYPE_FULLYCONNECTED) {
                     // no dump
