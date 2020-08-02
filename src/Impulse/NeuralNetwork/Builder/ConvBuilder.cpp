@@ -43,7 +43,8 @@ namespace Impulse {
                     if (layerType == Layer::TYPE_LOGISTIC ||
                         layerType == Layer::TYPE_RELU ||
                         layerType == Layer::TYPE_PURELIN ||
-                        layerType == Layer::TYPE_SOFTMAX) {
+                        layerType == Layer::TYPE_SOFTMAX ||
+                        layerType == Layer::TYPE_TANH) {
 
                         T_Size size = element["size"];
 
@@ -61,6 +62,10 @@ namespace Impulse {
                             });
                         } else if (layerType == Layer::TYPE_PURELIN) {
                             builder.createLayer<Layer::Purelin>([&size](auto *layer) {
+                                layer->setSize(size);
+                            });
+                        } else if (layerType == Layer::TYPE_TANH) {
+                            builder.createLayer<Layer::Tanh>([&size](auto *layer) {
                                 layer->setSize(size);
                             });
                         }

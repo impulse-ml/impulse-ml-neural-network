@@ -209,7 +209,11 @@ void test_mnist_minibatch_gradient_descent() {
 
     auto duration = duration_cast<seconds>(t2 - t1).count();
     std::cout << "Time: " << duration << std::endl;
+    high_resolution_clock::time_point t3 = high_resolution_clock::now();
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    high_resolution_clock::time_point t4 = high_resolution_clock::now();
+    auto duration2 = duration_cast<microseconds>(t4 - t3).count();
+    std::cout << "Forward time: " << duration2 << " microsends." << std::endl;
     std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
 
     Serializer serializer(net);
@@ -217,8 +221,8 @@ void test_mnist_minibatch_gradient_descent() {
 }
 
 void test_mnist_minibatch_gradient_descent_restore() {
-    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
-    Network::ConvNetwork network = builder.getNetwork();
+    Builder::ClassifierBuilder builder = Builder::ClassifierBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
+    Network::ClassifierNetwork network = builder.getNetwork();
 
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
             "../data/mnist_test_1000.csv");
@@ -234,13 +238,17 @@ void test_mnist_minibatch_gradient_descent_restore() {
     Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
     modifier2.applyToColumn(0);
 
-    std::cout << network.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    std::cout << "Forward:" << std::endl << network.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    auto duration2 = duration_cast<microseconds>(t2 - t1).count();
+    std::cout << "Forward time: " << duration2 << " microsends." << std::endl;
 }
 
 int main() {
     //test1();
-    test_mnist_minibatch_gradient_descent();
-    //test_mnist_minibatch_gradient_descent_restore();
+    //test_mnist_minibatch_gradient_descent();
+    test_mnist_minibatch_gradient_descent_restore();
     //test_conv_mnist();
     return 0;
 }

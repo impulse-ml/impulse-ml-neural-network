@@ -63,7 +63,9 @@ As you see layers and be configured with size so the builder also.
     trainer.train(slicedDataset);
 ```
 
-###### Cost and accuracy.
+## Other examples
+
+##### Cost and accuracy.
 
 ```c++
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
@@ -71,28 +73,39 @@ As you see layers and be configured with size so the builder also.
     std::cout << "Accuracy: " << cost.getAccuracy() << std::endl;
 ```
 
-###### Save trained network to file.
+##### Save trained network to file.
 
 ```c++
     Serializer serializer(net);
     serializer.toJSON("../saved/test_mnist_minibatch_gradient_descent.json");
 ```
 
-###### Restore trained network from file.
+##### Restore trained network from file.
 
 ```c++
     Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
     Network::ConvNetwork network = builder.getNetwork();
 ```
 
-###### Forward propagation.
+ Forward propagation.
 
 ```c++
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 ```
 
+## Layer types
+
+```c++
+Layer::Conv             // in ConvBuilder only
+Layer::FullyConnected   // in ConvBuilder only 
+Layer::Logistic
+Layer::MaxPool          // in ConvBuiler only
+Layer::Purelin
+Layer::Relu
+Layer::Softmax          // must be last
+Layer::Tanh
+```
+
 ## Author
 
-Michał Baniowski
-
-[banit.pl](https://banit.pl)
+Michał Baniowski [banit.pl](https://banit.pl)
