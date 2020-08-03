@@ -17,6 +17,12 @@ namespace Impulse {
 
                 this->gW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
                 this->gb.resize(this->numFilters, 1);
+
+                this->sW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->sB.resize(this->numFilters, 1);
+
+                this->vW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->vB.resize(this->numFilters, 1);
             }
 
             Eigen::MatrixXd Conv::forward(const Eigen::MatrixXd &input) {

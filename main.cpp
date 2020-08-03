@@ -100,6 +100,9 @@ void test_conv_mnist() {
     Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
     modifier2.applyToColumn(0);
 
+    Impulse::Dataset::DatasetModifier::Modifier::MinMaxScaling modifier3(slicedDataset.input);
+    modifier3.apply();
+
     Builder::ConvBuilder builder({28, 28, 1});
 
     builder.createLayer<Layer::Conv>([](auto *layer) {
@@ -140,12 +143,12 @@ void test_conv_mnist() {
 
     Network::ConvNetwork net = builder.getNetwork();
 
-    Trainer::ConjugateGradient trainer(net);
+    Trainer::MiniBatchGradientDescent trainer(net);
     trainer.setLearningIterations(10);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.1);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.1);
+    trainer.setLearningRate(0.55);
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
@@ -248,13 +251,13 @@ void test_mnist_minibatch_gradient_descent_restore() {
     std::cout << "Forward:" << std::endl << network.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(t2 - t1).count();
-    std::cout << "Forward time: " << duration2 << " microsends." << std::endl;
+    std::cout << "Forward time: " << duration2 << " microseconds." << std::endl;
 }
 
 int main() {
     //test1();
-    test_mnist_minibatch_gradient_descent();
+    //test_mnist_minibatch_gradient_descent();
     //test_mnist_minibatch_gradient_descent_restore();
-    //test_conv_mnist();
+    test_conv_mnist();
     return 0;
 }
