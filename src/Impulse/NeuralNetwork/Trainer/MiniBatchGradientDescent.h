@@ -11,6 +11,7 @@ namespace Impulse {
         namespace Trainer {
 
             //T_String OPTIMIZER_ADAM = "adam";
+            //T_String OPTIMIZER_RMS_PROP = "rmsprop";
 
             class MiniBatchGradientDescent : public AbstractTrainer {
             protected:

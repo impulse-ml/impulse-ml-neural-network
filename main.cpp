@@ -199,12 +199,12 @@ void test_mnist_minibatch_gradient_descent() {
     Network::ClassifierNetwork net = builder.getNetwork();
 
     Trainer::MiniBatchGradientDescent trainer(net);
-    trainer.setLearningIterations(4);
+    trainer.setLearningIterations(3);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.01);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.005);
-    trainer.setOptimizer("adam"); // you can comment this out
+    trainer.setLearningRate(0.01);
+    trainer.setOptimizer("momentum"); // you can comment this out
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
@@ -256,8 +256,8 @@ void test_mnist_minibatch_gradient_descent_restore() {
 
 int main() {
     //test1();
-    //test_mnist_minibatch_gradient_descent();
+    test_mnist_minibatch_gradient_descent();
     //test_mnist_minibatch_gradient_descent_restore();
-    test_conv_mnist();
+    //test_conv_mnist();
     return 0;
 }

@@ -186,5 +186,91 @@ namespace Impulse {
 
             b = b.array() - learningRate * (wCorrected.array() / sCorrected.array());
         }
+
+        void ComputationCpu::gradientRmsProp(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+            double epsilon = 1e-8;
+
+            s = gamma * s + (1.0 - gamma) * W.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            });
+            W = W.array() - (alpha * gW.array()) / s.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array();
+        }
+
+        void ComputationCpu::gradientRmsProp(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+            double epsilon = 1e-8;
+
+            s = gamma * s + (1.0 - gamma) * b.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            });
+            b = b.array() - (alpha * gb.array()) / s.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array();
+        }
+
+        void ComputationCpu::gradientAdagrad(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double epsilon = 1e-8;
+
+            s = s.array() + s.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            }).array();
+            W = W.array() - (alpha * gW.array() / s.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array());
+        }
+
+        void ComputationCpu::gradientAdagrad(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double epsilon = 1e-8;
+
+            s = s.array() + s.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            }).array();
+            b = b.array() - (alpha * gb.array() / s.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array());
+        }
+
+        void ComputationCpu::gradientNesterov(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+
+            Eigen::MatrixXd s_prev = s;
+
+            s = (gamma * s.array()) + (alpha * gW.array());
+            W = W.array() - ((1.0 + gamma) * s.array() - gamma * s_prev.array());
+        }
+
+        void ComputationCpu::gradientNesterov(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+
+            Eigen::MatrixXd s_prev = s;
+
+            s = (gamma * s.array()) + (alpha * gb.array());
+            b = b.array() - ((1.0 + gamma) * s.array() - gamma * s_prev.array());
+        }
+
+        void ComputationCpu::gradientMomentum(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+
+            s = (gamma * s.array()) + (alpha * gW.array());
+            W = W.array() - s.array();
+        }
+
+        void ComputationCpu::gradientMomentum(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+
+            s = (gamma * s.array()) + (alpha * gb.array());
+            b = b.array() - s.array();
+        }
     }
 }

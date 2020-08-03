@@ -60,6 +60,22 @@ namespace Impulse {
 
             void
             gradientAdam(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
+
+            void gradientRmsProp(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+
+            void gradientRmsProp(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
+
+            void gradientAdagrad(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+
+            void gradientAdagrad(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
+
+            void gradientNesterov(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+
+            void gradientNesterov(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
+
+            void gradientMomentum(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+
+            void gradientMomentum(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
         };
     }
 }

@@ -49,6 +49,26 @@ namespace Impulse {
                                                                     layer->vW, t);
                                 Computation::factory().gradientAdam(layer->b, learningRate, layer->gb, layer->sB,
                                                                     layer->vB, t);
+                            } else if (this->optimizer == "rmsprop") {
+                                Computation::factory().gradientRmsProp(layer->W, learningRate, layer->gW, layer->sW,
+                                                                       batchSize);
+                                Computation::factory().gradientRmsProp(layer->b, learningRate, layer->gb, layer->sB,
+                                                                       batchSize);
+                            } else if (this->optimizer == "adagrad") {
+                                Computation::factory().gradientAdagrad(layer->W, learningRate, layer->gW, layer->sW,
+                                                                       batchSize);
+                                Computation::factory().gradientAdagrad(layer->b, learningRate, layer->gb, layer->sB,
+                                                                       batchSize);
+                            } else if (this->optimizer == "nesterov") {
+                                Computation::factory().gradientNesterov(layer->W, learningRate, layer->gW, layer->sW,
+                                                                       batchSize);
+                                Computation::factory().gradientNesterov(layer->b, learningRate, layer->gb, layer->sB,
+                                                                       batchSize);
+                            } else if (this->optimizer == "momentum") {
+                                Computation::factory().gradientMomentum(layer->W, learningRate, layer->gW, layer->sW,
+                                                                        batchSize);
+                                Computation::factory().gradientMomentum(layer->b, learningRate, layer->gb, layer->sB,
+                                                                        batchSize);
                             } else {
                                 Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
                                 Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);

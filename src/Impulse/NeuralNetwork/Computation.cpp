@@ -103,5 +103,37 @@ namespace Impulse {
                                        Eigen::VectorXd &v, T_Size t) {
             ComputationCpu::factory().gradientAdam(b, learningRate, gb, s, v, t);
         }
+
+        void Computation::gradientRmsProp(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientRmsProp(W, learningRate, gW, s, batchSize);
+        }
+
+        void Computation::gradientRmsProp(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientRmsProp(b, learningRate, gb, s, batchSize);
+        }
+
+        void Computation::gradientAdagrad(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdagrad(W, learningRate, gW, s, batchSize);
+        }
+
+        void Computation::gradientAdagrad(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdagrad(b, learningRate, gb, s, batchSize);
+        }
+
+        void Computation::gradientNesterov(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdagrad(W, learningRate, gW, s, batchSize);
+        }
+
+        void Computation::gradientNesterov(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdagrad(b, learningRate, gb, s, batchSize);
+        }
+
+        void Computation::gradientMomentum(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdagrad(W, learningRate, gW, s, batchSize);
+        }
+
+        void Computation::gradientMomentum(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdagrad(b, learningRate, gb, s, batchSize);
+        }
     }
 }
