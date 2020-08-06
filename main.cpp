@@ -61,7 +61,7 @@ void test1() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatchGradientDescent trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
     trainer.setLearningIterations(2);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.0);
@@ -99,9 +99,6 @@ void test_conv_mnist() {
 
     Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
     modifier2.applyToColumn(0);
-
-    Impulse::Dataset::DatasetModifier::Modifier::MinMaxScaling modifier3(slicedDataset.input);
-    modifier3.apply();
 
     Builder::ConvBuilder builder({28, 28, 1});
 
@@ -143,12 +140,12 @@ void test_conv_mnist() {
 
     Network::ConvNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatchGradientDescent trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
     trainer.setLearningIterations(10);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.1);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.55);
+    trainer.setLearningRate(0.1);
 
     Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
@@ -160,14 +157,21 @@ void test_conv_mnist() {
 
     auto duration = duration_cast<seconds>(t2 - t1).count();
     std::cout << "Time: " << duration << std::endl;
+    high_resolution_clock::time_point t3 = high_resolution_clock::now();
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    high_resolution_clock::time_point t4 = high_resolution_clock::now();
+    auto duration2 = duration_cast<milliseconds>(t4 - t3).count();
+    std::cout << "Time forward: " << duration2 << std::endl;
     std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
+    high_resolution_clock::time_point t5 = high_resolution_clock::now();
+    auto duration3 = duration_cast<milliseconds>(t5 - t4).count();
+    std::cout << "Time cost: " << duration3 << std::endl;
 
     Serializer serializer(net);
     serializer.toJSON("../saved/test_conv_mnist.json");
 }
 
-void test_mnist_minibatch_gradient_descent() {
+SlicedDataset getMnistDataset() {
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
             "../data/mnist_test_1000.csv");
     Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
@@ -179,11 +183,17 @@ void test_mnist_minibatch_gradient_descent() {
 
     Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
 
-    Impulse::Dataset::DatasetModifier::Modifier::MinMaxScaling modifier3(slicedDataset.input);
-    modifier3.apply();
+    //Impulse::Dataset::DatasetModifier::Modifier::MinMaxScaling modifier2(slicedDataset.input);
+    //modifier2.apply();
 
-    Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
-    modifier2.applyToColumn(0);
+    Impulse::Dataset::DatasetModifier::Modifier::Category modifier3(slicedDataset.output);
+    modifier3.applyToColumn(0);
+
+    return slicedDataset;
+}
+
+void test_mnist_minibatch_gradient_descent() {
+    SlicedDataset dataset = getMnistDataset();
 
     Builder::ClassifierBuilder builder({28*28});
     builder.createLayer<Layer::Tanh>([](auto * layer) {
@@ -198,32 +208,31 @@ void test_mnist_minibatch_gradient_descent() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatchGradientDescent trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Adagrad> trainer(net);
     trainer.setLearningIterations(3);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.01);
     trainer.setVerbose(true);
     trainer.setLearningRate(0.01);
-    trainer.setOptimizer("momentum"); // you can comment this out
 
-    Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
+    Trainer::CostGradientResult cost = trainer.cost(dataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;
-    std::cout << "Accuracy: " << cost.getAccuracy() << std::endl;
-    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    std::cout << "Accuracy: " << cost.getAccuracy() << "%" << std::endl;
+    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    trainer.train(slicedDataset);
+    trainer.train(dataset);
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
     auto duration = duration_cast<seconds>(t2 - t1).count();
     std::cout << "Time: " << duration << std::endl;
     high_resolution_clock::time_point t3 = high_resolution_clock::now();
-    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
     high_resolution_clock::time_point t4 = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(t4 - t3).count();
     std::cout << "Forward time: " << duration2 << " microseconds." << std::endl;
-    std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
-    std::cout << "Accuracy: " << trainer.cost(slicedDataset).getAccuracy() << "%" << std::endl;
+    std::cout << "Cost: " << trainer.cost(dataset).getCost() << std::endl;
+    std::cout << "Accuracy: " << trainer.cost(dataset).getAccuracy() << "%" << std::endl;
 
     Serializer serializer(net);
     serializer.toJSON("../saved/test_mnist_minibatch_gradient_descent.json");

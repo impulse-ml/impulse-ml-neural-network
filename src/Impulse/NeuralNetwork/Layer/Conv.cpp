@@ -16,13 +16,22 @@ namespace Impulse {
                 this->b = Computation::factory().staticInit(this->b, 0.01);
 
                 this->gW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->gb.resize(this->numFilters, 1);
+                this->gW.setZero();
+
+                this->gB.resize(this->numFilters, 1);
+                this->gB.setZero();
 
                 this->sW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->sW.setZero();
+
                 this->sB.resize(this->numFilters, 1);
+                this->sB.setZero();
 
                 this->vW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->vW.setZero();
+
                 this->vB.resize(this->numFilters, 1);
+                this->vB.setZero();
             }
 
             Eigen::MatrixXd Conv::forward(const Eigen::MatrixXd &input) {

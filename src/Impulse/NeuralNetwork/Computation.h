@@ -49,33 +49,19 @@ namespace Impulse {
 
             double softmaxLoss(Eigen::MatrixXd &, Eigen::MatrixXd &);
 
-            void gradientDescent(Eigen::MatrixXd &, double, Eigen::MatrixXd &);
+            void gradientDescent(Layer::Abstract *, double);
 
-            void gradientDescent(Eigen::VectorXd &, double, Eigen::VectorXd &);
+            double layerPenalty(Eigen::MatrixXd &W);
 
-            double layerPenaltyMiniBatchGradientDescent(Eigen::MatrixXd &);
+            void gradientAdam(Layer::Abstract *, double, T_Size);
 
-            void
-            gradientAdam(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+            void gradientRmsProp(Layer::Abstract *, double, T_Size);
 
-            void
-            gradientAdam(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
+            void gradientAdagrad(Layer::Abstract *, double, T_Size);
 
-            void gradientRmsProp(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
+            void gradientNesterov(Layer::Abstract *, double, T_Size);
 
-            void gradientRmsProp(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
-
-            void gradientAdagrad(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
-
-            void gradientAdagrad(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
-
-            void gradientNesterov(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
-
-            void gradientNesterov(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
-
-            void gradientMomentum(Eigen::MatrixXd &, double, Eigen::MatrixXd &, Eigen::MatrixXd &, T_Size);
-
-            void gradientMomentum(Eigen::VectorXd &, double, Eigen::VectorXd &, Eigen::VectorXd &, T_Size);
+            void gradientMomentum(Layer::Abstract *, double, T_Size);
         };
     }
 }

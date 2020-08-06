@@ -10,14 +10,16 @@ namespace Impulse {
 
         namespace Trainer {
 
+            template<class OPTIMIZER_TYPE>
             class AbstractTrainer {
             protected:
-                Network::Abstract network;                        // network to train
-                double regularization = 0.0;            // regularization (lambda) parameters
-                T_Size learningIterations = 1000;       // number of learning iterations
-                double learningRate = 0.1;              // learning rate
-                bool verbose = true;                    // if display messages
-                int verboseStep = 100;                  // step for displaying messages
+                Network::Abstract network;                      // network to train
+                double regularization = 0.0;                    // regularization (lambda) parameters
+                T_Size learningIterations = 1000;               // number of learning iterations
+                double learningRate = 0.1;                      // learning rate
+                bool verbose = true;                            // if display messages
+                int verboseStep = 100;                          // step for displaying messages
+                OPTIMIZER_TYPE *optimizer = nullptr;           // optimizer
             public:
                 /**
                  * Constructor.
@@ -26,7 +28,7 @@ namespace Impulse {
                 explicit AbstractTrainer(Network::Abstract &net);
 
                 /**
-                 * Sets regularization (lamdba) parameters.
+                 * Sets regularization (lambda) parameters.
                  * @param value
                  */
                 void setRegularization(double value);

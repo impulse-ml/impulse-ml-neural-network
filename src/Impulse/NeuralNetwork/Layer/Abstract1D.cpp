@@ -18,13 +18,22 @@ namespace Impulse {
                 this->b = Computation::factory().randomInit(this->b, this->width);
 
                 this->gW.resize(this->height, this->width);
-                this->gb.resize(this->height);
+                this->gW.setZero();
+
+                this->gB.resize(this->height);
+                this->gB.setZero();
 
                 this->sW.resize(this->height, this->width);
+                this->sW.setZero();
+
                 this->sB.resize(this->height);
+                this->sB.setZero();
 
                 this->vW.resize(this->height, this->width);
+                this->vW.setZero();
+
                 this->vB.resize(this->height);
+                this->vB.setZero();
             }
 
             bool Abstract1D::is1D() {

@@ -26,7 +26,7 @@ namespace Impulse {
 
                     this->layer->gW = delta.array() / numberOfExamples +
                                       (regularization / numberOfExamples * this->layer->W.array());
-                    this->layer->gb = sigma.rowwise().sum() / numberOfExamples;
+                    this->layer->gB = sigma.rowwise().sum() / numberOfExamples;
 
                     if (this->previousLayer != nullptr) {
                         Eigen::MatrixXd tmp1 = this->layer->W.transpose() * sigma;

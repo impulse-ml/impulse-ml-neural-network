@@ -10,9 +10,10 @@ namespace Impulse {
 
         namespace Trainer {
 
-            class GradientDescent : public AbstractTrainer {
+            template<class OPTIMIZER_TYPE>
+            class Stochastic : public AbstractTrainer<OPTIMIZER_TYPE> {
             public:
-                explicit GradientDescent(Network::Abstract &net);
+                explicit Stochastic(Network::Abstract &net);
 
                 void train(Impulse::Dataset::SlicedDataset &dataSet) override;
             };

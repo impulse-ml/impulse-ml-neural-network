@@ -78,10 +78,14 @@ add_executable(impulse_ml_neural_network
         src/Impulse/NeuralNetwork/Trainer/common.h
         src/Impulse/NeuralNetwork/Trainer/ConjugateGradient.cpp
         src/Impulse/NeuralNetwork/Trainer/ConjugateGradient.h
-        src/Impulse/NeuralNetwork/Trainer/GradientDescent.cpp
-        src/Impulse/NeuralNetwork/Trainer/GradientDescent.h
-        src/Impulse/NeuralNetwork/Trainer/MiniBatchGradientDescent.cpp
-        src/Impulse/NeuralNetwork/Trainer/MiniBatchGradientDescent.h
+        src/Impulse/NeuralNetwork/Trainer/Stochastic.cpp
+        src/Impulse/NeuralNetwork/Trainer/Stochastic.h
+        src/Impulse/NeuralNetwork/Trainer/MiniBatch.cpp
+        src/Impulse/NeuralNetwork/Trainer/MiniBatch.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Rmsprop.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Rmsprop.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.h
         src/Impulse/NeuralNetwork/common.h
         src/Impulse/NeuralNetwork/include.h
         src/Impulse/NeuralNetwork/Serializer.cpp
@@ -126,4 +130,4 @@ add_executable(impulse_ml_neural_network
         src/Impulse/NeuralNetwork/ComputationCpu.h
         src/Impulse/NeuralNetwork/Computation.cpp
         src/Impulse/NeuralNetwork/Computation.h
-        main.cpp)
+        main.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Abstract.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Abstract.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Adagrad.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Adagrad.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Nesterov.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Nesterov.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Momentum.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Momentum.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/GradientDescent.h src/Impulse/NeuralNetwork/Trainer/Optimizer/GradientDescent.cpp)

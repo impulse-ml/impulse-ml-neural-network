@@ -8,33 +8,31 @@ namespace Impulse {
 
         namespace Trainer {
 
-            GradientDescent::GradientDescent(Network::Abstract &net) : AbstractTrainer(net) {}
+            template<class OPTIMIZER_TYPE>
+            Stochastic<OPTIMIZER_TYPE>::Stochastic(Network::Abstract &net) : AbstractTrainer<OPTIMIZER_TYPE>(net) {}
 
-            void GradientDescent::train(Impulse::Dataset::SlicedDataset &dataSet) {
-                Network::Abstract network = this->network;
-                double learningRate = this->learningRate;
-                T_Size iterations = this->learningIterations;
+            template<class OPTIMIZER_TYPE>
+            void Stochastic<OPTIMIZER_TYPE>::train(Impulse::Dataset::SlicedDataset &dataSet) {
+                T_Size t = 0;
 
-                for (T_Size i = 0; i < iterations; i++) {
+                for (T_Size i = 0; i < this->learningIterations; i++) {
                     high_resolution_clock::time_point begin = high_resolution_clock::now();
 
                     Eigen::MatrixXd input = dataSet.getInput();
                     Eigen::MatrixXd output = dataSet.getOutput();
-                    Eigen::MatrixXd forward = network.forward(input);
+                    Eigen::MatrixXd forward = this->network.forward(input);
 
-                    network.backward(input, output, forward, this->regularization);
+                    this->network.backward(input, output, forward, this->regularization);
 
                     Trainer::CostGradientResult result = this->cost(dataSet);
 
-                    for (T_Size j = 0; j < network.getSize(); j++) {
-                        Layer::LayerPointer layer = network.getLayer(j);
-
+                    for (T_Size j = 0; j < this->network.getSize(); j++) {
+                        Layer::LayerPointer layer = this->network.getLayer(j);
                         if (layer->getType() == Layer::TYPE_MAXPOOL) {
                             continue;
                         }
-
-                        Computation::factory().gradientDescent(layer->W, learningRate, layer->gW);
-                        Computation::factory().gradientDescent(layer->b, learningRate, layer->gb);
+                        this->optimizer->setT(++t);
+                        this->optimizer->optimize(layer);
                     }
 
                     Trainer::CostGradientResult currentResult = this->cost(dataSet);

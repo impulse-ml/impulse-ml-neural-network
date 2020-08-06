@@ -31,7 +31,7 @@ namespace Impulse {
                 Eigen::MatrixXd A;                                                       // output of the layer after activation
                 Eigen::MatrixXd Z;                                                       // output of the layer before activation
                 Eigen::MatrixXd gW;                                                      // gradient for weights
-                Eigen::VectorXd gb;                                                      // gradient for biases
+                Eigen::VectorXd gB;                                                      // gradient for biases
                 Eigen::MatrixXd sW;                                                      // for adam optimization
                 Eigen::VectorXd sB;                                                      // for adam optimization
                 Eigen::MatrixXd vW;                                                      // for adam optimization

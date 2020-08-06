@@ -36,7 +36,7 @@ namespace Impulse {
                     Eigen::MatrixXd aPrev = previousLayer->derivative();
 
                     previousLayer->gW.setZero();
-                    previousLayer->gb.setZero();
+                    previousLayer->gB.setZero();
 
 #pragma omp parallel for collapse(4)
                     for (int m = 0; m < numberOfExamples; m++) {
@@ -87,7 +87,7 @@ namespace Impulse {
                                         }
                                     }
 
-                                    previousLayer->gb(c, 0) +=
+                                    previousLayer->gB(c, 0) +=
                                             sigma(c * (outputWidth * outputHeight) + (h * outputWidth) + w, m) /
                                             numberOfExamples;
                                 }

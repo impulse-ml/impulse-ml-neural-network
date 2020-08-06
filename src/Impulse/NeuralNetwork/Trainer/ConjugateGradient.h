@@ -10,7 +10,8 @@ namespace Impulse {
 
         namespace Trainer {
 
-            class ConjugateGradient : public AbstractTrainer {
+            template<class OPTIMIZER_TYPE>
+            class ConjugateGradient : public AbstractTrainer<OPTIMIZER_TYPE> {
             public:
                 explicit ConjugateGradient(Network::Abstract &net);
 

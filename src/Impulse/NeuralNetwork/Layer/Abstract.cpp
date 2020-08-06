@@ -69,7 +69,7 @@ namespace Impulse {
             }
 
             double Abstract::penalty() {
-                return Computation::factory().layerPenaltyMiniBatchGradientDescent(this->W);
+                return Computation::factory().layerPenalty(this->W);
             }
         }
     }

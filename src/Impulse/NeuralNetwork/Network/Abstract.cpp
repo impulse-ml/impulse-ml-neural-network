@@ -96,9 +96,9 @@ namespace Impulse {
                         }
                     }
 
-                    for (T_Size j = 0; j < layer->gb.rows(); j++) {
-                        for (T_Size k = 0; k < layer->gb.cols(); k++) {
-                            tmp.push_back(layer->gb(j, k));
+                    for (T_Size j = 0; j < layer->gB.rows(); j++) {
+                        for (T_Size k = 0; k < layer->gB.cols(); k++) {
+                            tmp.push_back(layer->gB(j, k));
                         }
                     }
                 }

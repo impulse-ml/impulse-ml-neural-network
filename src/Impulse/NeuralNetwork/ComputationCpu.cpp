@@ -129,148 +129,120 @@ namespace Impulse {
             return loss.sum();
         }
 
-        void ComputationCpu::gradientDescent(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW) {
-            W = W.array() - learningRate * gW.array();
+        void ComputationCpu::gradientDescent(Layer::Abstract *layer, double learningRate) {
+            layer->W = layer->W.array() - learningRate * layer->gW.array();
+            layer->b = layer->b.array() - learningRate * layer->gB.array();
         }
 
-        void ComputationCpu::gradientDescent(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb) {
-            b = b.array() - learningRate * gb.array();
-        }
-
-        double ComputationCpu::layerPenaltyMiniBatchGradientDescent(Eigen::MatrixXd &W) {
+        double ComputationCpu::layerPenalty(Eigen::MatrixXd & W) {
             return W.unaryExpr([](const double x) {
                 return pow(x, 2.0);
             }).sum();
         }
 
         void
-        ComputationCpu::gradientAdam(Eigen::MatrixXd &W, double learningRate, Eigen::MatrixXd &gW, Eigen::MatrixXd &s,
-                                     Eigen::MatrixXd &v, T_Size t) {
+        ComputationCpu::gradientAdam(Layer::Abstract *layer, double learningRate, T_Size t) {
             double beta1 = 0.9;
             double beta2 = 0.999;
             double epsilon = 1e-8;
 
-            v = beta1 * v + (1 - beta1) * gW;
-            Eigen::MatrixXd wCorrected = v / (1 - std::pow(beta1, t));
+            layer->vW = beta1 * layer->vW + (1 - beta1) * layer->gW;
+            Eigen::MatrixXd wCorrected = layer->vW / (1 - std::pow(beta1, t));
 
-            s = beta2 * s + (1 - beta2) * gW.unaryExpr([](double x) {
+            layer->sW = beta2 * layer->sW + (1 - beta2) * layer->gW.unaryExpr([](double x) {
                 return std::pow(x, 2);
             });
 
-            Eigen::MatrixXd sCorrected = s / (1 - std::pow(beta2, t));
+            Eigen::MatrixXd sCorrected = layer->sW / (1 - std::pow(beta2, t));
             sCorrected = sCorrected.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             });
 
-            W = W.array() - learningRate * (wCorrected.array() / sCorrected.array());
-        }
+            layer->W = layer->W.array() - learningRate * (wCorrected.array() / sCorrected.array());
 
-        void
-        ComputationCpu::gradientAdam(Eigen::VectorXd &b, double learningRate, Eigen::VectorXd &gb, Eigen::VectorXd &s,
-                                     Eigen::VectorXd &v, T_Size t) {
-            double beta1 = 0.9;
-            double beta2 = 0.999;
-            double epsilon = 1e-8;
+            //
 
-            v = beta1 * v + (1 - beta1) * gb;
-            Eigen::MatrixXd wCorrected = v / (1 - std::pow(beta1, t));
+            layer->vB = beta1 * layer->vB + (1 - beta1) * layer->gB;
+            Eigen::VectorXd wCorrected2 = layer->vB / (1 - std::pow(beta1, t));
 
-            s = beta2 * s + (1 - beta2) * gb.unaryExpr([](double x) {
+            layer->sB = beta2 * layer->sB + (1 - beta2) * layer->gB.unaryExpr([](double x) {
                 return std::pow(x, 2);
             });
 
-            Eigen::MatrixXd sCorrected = s / (1 - std::pow(beta2, t));
-            sCorrected = sCorrected.unaryExpr([epsilon](double x) {
+            Eigen::VectorXd sCorrected2 = layer->sB / (1 - std::pow(beta2, t));
+            sCorrected2 = sCorrected2.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             });
 
-            b = b.array() - learningRate * (wCorrected.array() / sCorrected.array());
+            layer->b = layer->b.array() - learningRate * (wCorrected2.array() / sCorrected2.array());
         }
 
-        void ComputationCpu::gradientRmsProp(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+        void ComputationCpu::gradientRmsProp(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             double alpha = learningRate / (double) batchSize;
             double gamma = 0.9;
             double epsilon = 1e-8;
 
-            s = gamma * s + (1.0 - gamma) * W.unaryExpr([](double x) {
+            layer->sW = gamma * layer->sW + (1.0 - gamma) * layer->W.unaryExpr([](double x) {
                 return std::pow(x, 2);
             });
-            W = W.array() - (alpha * gW.array()) / s.unaryExpr([epsilon](double x) {
+            layer->W = layer->W.array() - (alpha * layer->gW.array()) / layer->sW.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array();
+
+            layer->sB = gamma * layer->sB + (1.0 - gamma) * layer->b.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            });
+            layer->b = layer->b.array() - (alpha * layer->gB.array()) / layer->sB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array();
         }
 
-        void ComputationCpu::gradientRmsProp(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+        void ComputationCpu::gradientAdagrad(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             double alpha = learningRate / (double) batchSize;
-            double gamma = 0.9;
             double epsilon = 1e-8;
 
-            s = gamma * s + (1.0 - gamma) * b.unaryExpr([](double x) {
+            layer->sW = layer->sW.array() + layer->gW.unaryExpr([](double x) {
                 return std::pow(x, 2);
-            });
-            b = b.array() - (alpha * gb.array()) / s.unaryExpr([epsilon](double x) {
+            }).array();
+            layer->W = layer->W.array() - (alpha * layer->gW.array() / layer->sW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array();
-        }
+            }).array());
 
-        void ComputationCpu::gradientAdagrad(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
-            double epsilon = 1e-8;
-
-            s = s.array() + s.unaryExpr([](double x) {
+            layer->sB = layer->sB.array() + layer->gB.unaryExpr([](double x) {
                 return std::pow(x, 2);
             }).array();
-            W = W.array() - (alpha * gW.array() / s.unaryExpr([epsilon](double x) {
+            layer->b = layer->b.array() - (alpha * layer->gB.array() / layer->sB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array());
         }
 
-        void ComputationCpu::gradientAdagrad(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
-            double epsilon = 1e-8;
-
-            s = s.array() + s.unaryExpr([](double x) {
-                return std::pow(x, 2);
-            }).array();
-            b = b.array() - (alpha * gb.array() / s.unaryExpr([epsilon](double x) {
-                return std::sqrt(x + epsilon);
-            }).array());
-        }
-
-        void ComputationCpu::gradientNesterov(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
+        void ComputationCpu::gradientNesterov(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             double alpha = learningRate / (double) batchSize;
             double gamma = 0.9;
 
-            Eigen::MatrixXd s_prev = s;
+            Eigen::MatrixXd s_prev = layer->sW;
 
-            s = (gamma * s.array()) + (alpha * gW.array());
-            W = W.array() - ((1.0 + gamma) * s.array() - gamma * s_prev.array());
+            layer->sW = (gamma * layer->sW.array()) + (alpha * layer->gW.array());
+            layer->W = layer->W.array() - ((1.0 + gamma) * layer->sW.array() - gamma * s_prev.array());
+
+            //
+
+            Eigen::VectorXd s_prev_b = layer->sB;
+
+            layer->sB = (gamma * layer->sB.array()) + (alpha * layer->gB.array());
+            layer->b = layer->b.array() - ((1.0 + gamma) * layer->sB.array() - gamma * s_prev_b.array());
         }
 
-        void ComputationCpu::gradientNesterov(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
+        void ComputationCpu::gradientMomentum(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             double alpha = learningRate / (double) batchSize;
             double gamma = 0.9;
 
-            Eigen::MatrixXd s_prev = s;
+            layer->sW = (gamma * layer->sW.array()) + (alpha * layer->gW.array());
+            layer->W = layer->W.array() - layer->sW.array();
 
-            s = (gamma * s.array()) + (alpha * gb.array());
-            b = b.array() - ((1.0 + gamma) * s.array() - gamma * s_prev.array());
+            layer->sB = (gamma * layer->sB.array()) + (alpha * layer->gB.array());
+            layer->b = layer->b.array() - layer->sB.array();
         }
 
-        void ComputationCpu::gradientMomentum(Eigen::MatrixXd & W, double learningRate, Eigen::MatrixXd & gW, Eigen::MatrixXd & s, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
-            double gamma = 0.9;
-
-            s = (gamma * s.array()) + (alpha * gW.array());
-            W = W.array() - s.array();
-        }
-
-        void ComputationCpu::gradientMomentum(Eigen::VectorXd & b, double learningRate, Eigen::VectorXd & gb, Eigen::VectorXd & s, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
-            double gamma = 0.9;
-
-            s = (gamma * s.array()) + (alpha * gb.array());
-            b = b.array() - s.array();
-        }
     }
 }
