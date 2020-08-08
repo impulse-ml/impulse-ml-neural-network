@@ -12,8 +12,8 @@ namespace Impulse {
                 return Computation::factory().softmaxActivation(m);
             }
 
-            Eigen::MatrixXd Softmax::derivative() {
-                return Computation::factory().softmaxDerivative(this->A);
+            Eigen::MatrixXd Softmax::derivative(Eigen::MatrixXd &a) {
+                return Computation::factory().softmaxDerivative(a);
             }
 
             const T_String Softmax::getType() {

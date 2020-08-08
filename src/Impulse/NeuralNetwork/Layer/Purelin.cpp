@@ -12,7 +12,7 @@ namespace Impulse {
                 return m;
             }
 
-            Eigen::MatrixXd Purelin::derivative() {
+            Eigen::MatrixXd Purelin::derivative(Eigen::MatrixXd &) {
                 Eigen::MatrixXd d(this->Z.rows(), this->Z.cols());
                 d.setOnes();
                 return d;

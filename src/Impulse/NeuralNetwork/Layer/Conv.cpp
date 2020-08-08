@@ -21,11 +21,11 @@ namespace Impulse {
                 this->gB.resize(this->numFilters, 1);
                 this->gB.setZero();
 
-                this->sW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->sW.setZero();
+                this->cW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->cW.setZero();
 
-                this->sB.resize(this->numFilters, 1);
-                this->sB.setZero();
+                this->cB.resize(this->numFilters, 1);
+                this->cB.setZero();
 
                 this->vW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
                 this->vW.setZero();
@@ -108,8 +108,8 @@ namespace Impulse {
                 return Computation::factory().reluActivation(m);
             }
 
-            Eigen::MatrixXd Conv::derivative() {
-                return Computation::factory().reluDerivative(this->A);
+            Eigen::MatrixXd Conv::derivative(Eigen::MatrixXd &a) {
+                return Computation::factory().reluDerivative(a);
             }
 
             const T_String Conv::getType() {

@@ -26,16 +26,18 @@ namespace Impulse {
                 Layer::LayerPointer previousLayer = nullptr;                            // pointer to the previous layer in the network
 
             public:
-                Eigen::MatrixXd W;                                                       // weights
-                Eigen::VectorXd b;                                                       // bias
-                Eigen::MatrixXd A;                                                       // output of the layer after activation
-                Eigen::MatrixXd Z;                                                       // output of the layer before activation
-                Eigen::MatrixXd gW;                                                      // gradient for weights
-                Eigen::VectorXd gB;                                                      // gradient for biases
-                Eigen::MatrixXd sW;                                                      // for adam optimization
-                Eigen::VectorXd sB;                                                      // for adam optimization
-                Eigen::MatrixXd vW;                                                      // for adam optimization
-                Eigen::VectorXd vB;
+                Eigen::MatrixXd W;                                                      // weights
+                Eigen::VectorXd b;                                                      // bias
+                Eigen::MatrixXd A;                                                      // output of the layer after activation
+                Eigen::MatrixXd Z;                                                      // output of the layer before activation
+                Eigen::MatrixXd gW;                                                     // gradient for weights
+                Eigen::VectorXd gB;                                                     // gradient for biases
+                Eigen::MatrixXd cW;                                                     // for optimizations
+                Eigen::VectorXd cB;                                                     // for optimizations
+                Eigen::MatrixXd vW;                                                     // for optimizations
+                Eigen::VectorXd vB;                                                     // for optimizations
+                Eigen::MatrixXd wW;                                                     // for optimizations
+                Eigen::VectorXd wB;                                                     // for optimizations
                 BackPropagation::BackPropagationPointer backpropagation = nullptr;      // pointer to the backpropagation algorithm
                 /**
                  * Pure constructor
@@ -60,7 +62,7 @@ namespace Impulse {
                  * Calculates derivative. It depends on activation function.
                  * @return
                  */
-                virtual Eigen::MatrixXd derivative() = 0;
+                virtual Eigen::MatrixXd derivative(Eigen::MatrixXd &) = 0;
 
                 /**
                  * Getter for layer type.

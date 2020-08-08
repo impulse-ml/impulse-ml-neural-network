@@ -33,7 +33,7 @@ namespace Impulse {
 
                     Eigen::MatrixXd result(inputWidth * inputHeight * inputDepth, numberOfExamples);
 
-                    Eigen::MatrixXd aPrev = previousLayer->derivative();
+                    Eigen::MatrixXd aPrev = previousLayer->derivative(previousLayer->A);
 
                     previousLayer->gW.setZero();
                     previousLayer->gB.setZero();

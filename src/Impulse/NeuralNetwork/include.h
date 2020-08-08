@@ -52,6 +52,7 @@
 #include "Computation.h"
 #include "Trainer/Optimizer/Abstract.h"
 #include "Trainer/Optimizer/Adam.h"
+#include "Trainer/Optimizer/Adadelta.h"
 #include "Trainer/Optimizer/Adagrad.h"
 #include "Trainer/Optimizer/GradientDescent.h"
 #include "Trainer/Optimizer/Momentum.h"

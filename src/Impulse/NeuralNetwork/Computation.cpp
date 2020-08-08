@@ -109,5 +109,9 @@ namespace Impulse {
         void Computation::gradientMomentum(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             ComputationCpu::factory().gradientMomentum(layer, learningRate, batchSize);
         }
+
+        void Computation::gradientAdadelta(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
+            ComputationCpu::factory().gradientAdadelta(layer, learningRate, batchSize);
+        }
     }
 }

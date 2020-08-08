@@ -62,6 +62,8 @@ namespace Impulse {
             void gradientNesterov(Layer::Abstract *, double, T_Size);
 
             void gradientMomentum(Layer::Abstract *, double, T_Size);
+
+            void gradientAdadelta(Layer::Abstract *, double, T_Size);
         };
     }
 }

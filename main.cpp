@@ -10,17 +10,8 @@
 */
 
 #include <iostream>
-#include <cstdlib>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <ios>
-#include <ctime>
 #include <experimental/filesystem>
 #include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
-#include <zconf.h>
 
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/include.h"
 #include "src/Impulse/NeuralNetwork/include.h"
@@ -208,12 +199,12 @@ void test_mnist_minibatch_gradient_descent() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatch<Trainer::Optimizer::Adagrad> trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
     trainer.setLearningIterations(3);
     trainer.setVerboseStep(1);
-    trainer.setRegularization(0.01);
+    trainer.setRegularization(0.0);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.01);
+    trainer.setLearningRate(0.2);
 
     Trainer::CostGradientResult cost = trainer.cost(dataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;

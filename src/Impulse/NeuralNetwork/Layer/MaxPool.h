@@ -33,7 +33,7 @@ namespace Impulse {
 
                 Eigen::MatrixXd activation(Eigen::MatrixXd &m) override;
 
-                Eigen::MatrixXd derivative() override;
+                Eigen::MatrixXd derivative(Eigen::MatrixXd &a) override;
 
                 const T_String getType() override;
 

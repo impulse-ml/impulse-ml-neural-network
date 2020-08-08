@@ -12,8 +12,8 @@ namespace Impulse {
                 return Computation::factory().softplusActivation(m);
             }
 
-            Eigen::MatrixXd Softplus::derivative() {
-                return Computation::factory().softplusDerivative(this->A);
+            Eigen::MatrixXd Softplus::derivative(Eigen::MatrixXd &a) {
+                return Computation::factory().softplusDerivative(a);
             }
 
             const T_String Softplus::getType() {

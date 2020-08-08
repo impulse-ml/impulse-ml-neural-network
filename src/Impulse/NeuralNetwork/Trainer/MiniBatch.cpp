@@ -29,6 +29,9 @@ namespace Impulse {
             template
             MiniBatch<Optimizer::Rmsprop>::MiniBatch(Network::Abstract &net);
 
+            template
+            MiniBatch<Optimizer::Adadelta>::MiniBatch(Network::Abstract &net);
+
             template<typename OPTIMIZER_TYPE>
             void MiniBatch<OPTIMIZER_TYPE>::setBatchSize(T_Size value) {
                 this->batchSize = value;

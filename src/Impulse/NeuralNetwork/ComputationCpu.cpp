@@ -134,7 +134,7 @@ namespace Impulse {
             layer->b = layer->b.array() - learningRate * layer->gB.array();
         }
 
-        double ComputationCpu::layerPenalty(Eigen::MatrixXd & W) {
+        double ComputationCpu::layerPenalty(Eigen::MatrixXd &W) {
             return W.unaryExpr([](const double x) {
                 return pow(x, 2.0);
             }).sum();
@@ -149,11 +149,9 @@ namespace Impulse {
             layer->vW = beta1 * layer->vW + (1 - beta1) * layer->gW;
             Eigen::MatrixXd wCorrected = layer->vW / (1 - std::pow(beta1, t));
 
-            layer->sW = beta2 * layer->sW + (1 - beta2) * layer->gW.unaryExpr([](double x) {
-                return std::pow(x, 2);
-            });
+            layer->cW = beta2 * layer->cW.array() + (1 - beta2) * (layer->gW.array() * layer->gW.array());
 
-            Eigen::MatrixXd sCorrected = layer->sW / (1 - std::pow(beta2, t));
+            Eigen::MatrixXd sCorrected = layer->cW / (1 - std::pow(beta2, t));
             sCorrected = sCorrected.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             });
@@ -165,11 +163,9 @@ namespace Impulse {
             layer->vB = beta1 * layer->vB + (1 - beta1) * layer->gB;
             Eigen::VectorXd wCorrected2 = layer->vB / (1 - std::pow(beta1, t));
 
-            layer->sB = beta2 * layer->sB + (1 - beta2) * layer->gB.unaryExpr([](double x) {
-                return std::pow(x, 2);
-            });
+            layer->cB = beta2 * layer->cB.array() + (1 - beta2) * (layer->gB.array() * layer->gB.array());
 
-            Eigen::VectorXd sCorrected2 = layer->sB / (1 - std::pow(beta2, t));
+            Eigen::VectorXd sCorrected2 = layer->cB / (1 - std::pow(beta2, t));
             sCorrected2 = sCorrected2.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             });
@@ -182,17 +178,13 @@ namespace Impulse {
             double gamma = 0.9;
             double epsilon = 1e-8;
 
-            layer->sW = gamma * layer->sW + (1.0 - gamma) * layer->W.unaryExpr([](double x) {
-                return std::pow(x, 2);
-            });
-            layer->W = layer->W.array() - (alpha * layer->gW.array()) / layer->sW.unaryExpr([epsilon](double x) {
+            layer->cW = gamma * layer->cW.array() + (1.0 - gamma) * (layer->gW.array() * layer->gW.array());
+            layer->W = layer->gW.array() * alpha / layer->cW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array();
 
-            layer->sB = gamma * layer->sB + (1.0 - gamma) * layer->b.unaryExpr([](double x) {
-                return std::pow(x, 2);
-            });
-            layer->b = layer->b.array() - (alpha * layer->gB.array()) / layer->sB.unaryExpr([epsilon](double x) {
+            layer->cB = gamma * layer->cB.array() + (1.0 - gamma) * (layer->gB.array() * layer->gB.array());
+            layer->b = layer->gB.array() * alpha / layer->cB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array();
         }
@@ -201,17 +193,17 @@ namespace Impulse {
             double alpha = learningRate / (double) batchSize;
             double epsilon = 1e-8;
 
-            layer->sW = layer->sW.array() + layer->gW.unaryExpr([](double x) {
+            layer->cW = layer->cW.array() + layer->gW.unaryExpr([](double x) {
                 return std::pow(x, 2);
             }).array();
-            layer->W = layer->W.array() - (alpha * layer->gW.array() / layer->sW.unaryExpr([epsilon](double x) {
+            layer->W = layer->W.array() - (alpha * layer->gW.array() / layer->cW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array());
 
-            layer->sB = layer->sB.array() + layer->gB.unaryExpr([](double x) {
+            layer->cB = layer->cB.array() + layer->gB.unaryExpr([](double x) {
                 return std::pow(x, 2);
             }).array();
-            layer->b = layer->b.array() - (alpha * layer->gB.array() / layer->sB.unaryExpr([epsilon](double x) {
+            layer->b = layer->b.array() - (alpha * layer->gB.array() / layer->cB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array());
         }
@@ -220,29 +212,54 @@ namespace Impulse {
             double alpha = learningRate / (double) batchSize;
             double gamma = 0.9;
 
-            Eigen::MatrixXd s_prev = layer->sW;
+            Eigen::MatrixXd s_prev = layer->cW;
 
-            layer->sW = (gamma * layer->sW.array()) + (alpha * layer->gW.array());
-            layer->W = layer->W.array() - ((1.0 + gamma) * layer->sW.array() - gamma * s_prev.array());
+            layer->cW = (gamma * layer->cW.array()) + (alpha * layer->gW.array());
+            layer->W = layer->W.array() - ((1.0 + gamma) * layer->cW.array() - gamma * s_prev.array());
 
             //
 
-            Eigen::VectorXd s_prev_b = layer->sB;
+            Eigen::VectorXd s_prev_b = layer->cB;
 
-            layer->sB = (gamma * layer->sB.array()) + (alpha * layer->gB.array());
-            layer->b = layer->b.array() - ((1.0 + gamma) * layer->sB.array() - gamma * s_prev_b.array());
+            layer->cB = (gamma * layer->cB.array()) + (alpha * layer->gB.array());
+            layer->b = layer->b.array() - ((1.0 + gamma) * layer->cB.array() - gamma * s_prev_b.array());
         }
 
         void ComputationCpu::gradientMomentum(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             double alpha = learningRate / (double) batchSize;
             double gamma = 0.9;
 
-            layer->sW = (gamma * layer->sW.array()) + (alpha * layer->gW.array());
-            layer->W = layer->W.array() - layer->sW.array();
+            layer->cW = (gamma * layer->cW.array()) + (alpha * layer->gW.array());
+            layer->W = layer->W.array() - layer->cW.array();
 
-            layer->sB = (gamma * layer->sB.array()) + (alpha * layer->gB.array());
-            layer->b = layer->b.array() - layer->sB.array();
+            layer->cB = (gamma * layer->cB.array()) + (alpha * layer->gB.array());
+            layer->b = layer->b.array() - layer->cB.array();
         }
 
+        void ComputationCpu::gradientAdadelta(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
+            //double alpha = learningRate / (double) batchSize;
+            double gamma = 0.9;
+            double epsilon = 1e-6;
+
+            layer->cW = (gamma * layer->cW.array()) + (1.0 - gamma) * (layer->gW.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            }).array());
+            layer->W = layer->gW.array() * (layer->vW.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array() / layer->cW.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array()).array();
+            layer->vW = gamma * layer->vW.array() + (1.0 - gamma) * (layer->W.array() * layer->W.array());
+
+            layer->cB = (gamma * layer->cB.array()) + (1.0 - gamma) * (layer->gB.array() * layer->gB.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            }).array());
+            layer->b = layer->gB.array() * (layer->vB.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array() / layer->cB.unaryExpr([epsilon](double x) {
+                return std::sqrt(x + epsilon);
+            }).array()).array();
+            layer->vB = gamma * layer->vB.array() + (1.0 - gamma) * (layer->b.array() * layer->b.array());
+        }
     }
 }

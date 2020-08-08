@@ -23,17 +23,23 @@ namespace Impulse {
                 this->gB.resize(this->height);
                 this->gB.setZero();
 
-                this->sW.resize(this->height, this->width);
-                this->sW.setZero();
+                this->cW.resize(this->height, this->width);
+                this->cW.setZero();
 
-                this->sB.resize(this->height);
-                this->sB.setZero();
+                this->cB.resize(this->height);
+                this->cB.setZero();
 
                 this->vW.resize(this->height, this->width);
                 this->vW.setZero();
 
                 this->vB.resize(this->height);
                 this->vB.setZero();
+
+                this->wW.resize(this->height, this->width);
+                this->wW.setZero();
+
+                this->wB.resize(this->height);
+                this->wB.setZero();
             }
 
             bool Abstract1D::is1D() {

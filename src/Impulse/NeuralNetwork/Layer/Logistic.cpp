@@ -12,8 +12,8 @@ namespace Impulse {
                 return Computation::factory().logisticActivation(m);
             }
 
-            Eigen::MatrixXd Logistic::derivative() {
-                return Computation::factory().logisticDerivative(this->A);
+            Eigen::MatrixXd Logistic::derivative(Eigen::MatrixXd &a) {
+                return Computation::factory().logisticDerivative(a);
             }
 
             const T_String Logistic::getType() {

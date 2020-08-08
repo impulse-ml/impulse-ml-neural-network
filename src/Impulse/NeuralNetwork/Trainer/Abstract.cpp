@@ -15,6 +15,9 @@ namespace Impulse {
             AbstractTrainer<Optimizer::Adam>::AbstractTrainer(Network::Abstract &net);
 
             template
+            AbstractTrainer<Optimizer::Adadelta>::AbstractTrainer(Network::Abstract &net);
+
+            template
             AbstractTrainer<Optimizer::Adagrad>::AbstractTrainer(Network::Abstract &net);
 
             template
@@ -38,6 +41,9 @@ namespace Impulse {
             void AbstractTrainer<Optimizer::Adam>::setRegularization(double value);
 
             template
+            void AbstractTrainer<Optimizer::Adadelta>::setRegularization(double value);
+
+            template
             void AbstractTrainer<Optimizer::Adagrad>::setRegularization(double value);
 
             template
@@ -59,6 +65,9 @@ namespace Impulse {
 
             template
             void AbstractTrainer<Optimizer::Adam>::setLearningIterations(T_Size value);
+
+            template
+            void AbstractTrainer<Optimizer::Adadelta>::setLearningIterations(T_Size value);
 
             template
             void AbstractTrainer<Optimizer::Adagrad>::setLearningIterations(T_Size value);
@@ -85,6 +94,9 @@ namespace Impulse {
             void AbstractTrainer<Optimizer::Adam>::setLearningRate(double value);
 
             template
+            void AbstractTrainer<Optimizer::Adadelta>::setLearningRate(double value);
+
+            template
             void AbstractTrainer<Optimizer::Adagrad>::setLearningRate(double value);
 
             template
@@ -108,6 +120,9 @@ namespace Impulse {
             void AbstractTrainer<Optimizer::Adam>::setVerbose(bool value);
 
             template
+            void AbstractTrainer<Optimizer::Adadelta>::setVerbose(bool value);
+
+            template
             void AbstractTrainer<Optimizer::Adagrad>::setVerbose(bool value);
 
             template
@@ -129,6 +144,9 @@ namespace Impulse {
 
             template
             void AbstractTrainer<Optimizer::Adam>::setVerboseStep(int value);
+
+            template
+            void AbstractTrainer<Optimizer::Adadelta>::setVerboseStep(int value);
 
             template
             void AbstractTrainer<Optimizer::Adagrad>::setVerboseStep(int value);
@@ -207,6 +225,10 @@ namespace Impulse {
             template
             Impulse::NeuralNetwork::Trainer::CostGradientResult
             AbstractTrainer<Optimizer::Adam>::cost(Impulse::Dataset::SlicedDataset &dataSet, bool rollGradient);
+
+            template
+            Impulse::NeuralNetwork::Trainer::CostGradientResult
+            AbstractTrainer<Optimizer::Adadelta>::cost(Impulse::Dataset::SlicedDataset &dataSet, bool rollGradient);
 
             template
             Impulse::NeuralNetwork::Trainer::CostGradientResult

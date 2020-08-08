@@ -48,13 +48,25 @@ As you see layers and be configured with size so the builder also.
 ##### Step 3: Create training method.
 
 ```c++
-    Trainer::MiniBatchGradientDescent trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
     trainer.setLearningIterations(30);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.01);
     trainer.setVerbose(true);
     trainer.setLearningRate(0.01);
     trainer.setOptimizer("adam");
+```
+
+Available trainers:
+```c++
+Trainer::MiniBatch
+Trainer::Stochastic
+```
+
+Available optimizers:
+```c++
+Trainer::Optimizer::Adam
+Trainer::Optimizer::GradientDescent
 ```
 
 ##### Step 4: Train the network.
@@ -83,8 +95,8 @@ As you see layers and be configured with size so the builder also.
 ##### Restore trained network from file.
 
 ```c++
-    Builder::ConvBuilder builder = Builder::ConvBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
-    Network::ConvNetwork network = builder.getNetwork();
+    Builder::ClassifierBuilder builder = Builder::ClassifierBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
+    Network::ClassifierNetwork network = builder.getNetwork();
 ```
 
 ##### Forward propagation.
@@ -103,7 +115,6 @@ Layer::MaxPool          // in ConvBuiler only
 Layer::Purelin
 Layer::Relu
 Layer::Softmax          // must be last
-Layer::Softplus
 Layer::Tanh
 ```
 

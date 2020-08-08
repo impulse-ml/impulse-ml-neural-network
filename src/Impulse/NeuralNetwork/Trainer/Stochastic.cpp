@@ -11,6 +11,27 @@ namespace Impulse {
             template<class OPTIMIZER_TYPE>
             Stochastic<OPTIMIZER_TYPE>::Stochastic(Network::Abstract &net) : AbstractTrainer<OPTIMIZER_TYPE>(net) {}
 
+            template
+            Stochastic<Optimizer::GradientDescent>::Stochastic(Network::Abstract &net);
+
+            template
+            Stochastic<Optimizer::Adam>::Stochastic(Network::Abstract &net);
+
+            template
+            Stochastic<Optimizer::Adagrad>::Stochastic(Network::Abstract &net);
+
+            template
+            Stochastic<Optimizer::Momentum>::Stochastic(Network::Abstract &net);
+
+            template
+            Stochastic<Optimizer::Nesterov>::Stochastic(Network::Abstract &net);
+
+            template
+            Stochastic<Optimizer::Rmsprop>::Stochastic(Network::Abstract &net);
+
+            template
+            Stochastic<Optimizer::Adadelta>::Stochastic(Network::Abstract &net);
+
             template<class OPTIMIZER_TYPE>
             void Stochastic<OPTIMIZER_TYPE>::train(Impulse::Dataset::SlicedDataset &dataSet) {
                 T_Size t = 0;
@@ -32,7 +53,7 @@ namespace Impulse {
                             continue;
                         }
                         this->optimizer->setT(++t);
-                        this->optimizer->optimize(layer);
+                        this->optimizer->optimize(layer.get());
                     }
 
                     Trainer::CostGradientResult currentResult = this->cost(dataSet);

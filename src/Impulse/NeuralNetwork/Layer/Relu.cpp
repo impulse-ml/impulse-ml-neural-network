@@ -12,8 +12,8 @@ namespace Impulse {
                 return Computation::factory().reluActivation(m);
             }
 
-            Eigen::MatrixXd Relu::derivative() {
-                return Computation::factory().reluDerivative(this->A);
+            Eigen::MatrixXd Relu::derivative(Eigen::MatrixXd &a) {
+                return Computation::factory().reluDerivative(a);
             }
 
             const T_String Relu::getType() {

@@ -50,7 +50,7 @@ namespace Impulse {
                 return Eigen::MatrixXd(); // no activation for maxpool layer
             }
 
-            Eigen::MatrixXd MaxPool::derivative() {
+            Eigen::MatrixXd MaxPool::derivative(Eigen::MatrixXd &) {
                 static_assert("No derivative for MAXPOOL layer.", "");
                 return Eigen::MatrixXd(); // no derivative for maxpool layer
             }

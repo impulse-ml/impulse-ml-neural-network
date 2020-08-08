@@ -12,8 +12,8 @@ namespace Impulse {
                 return Computation::factory().tanhActivation(m);
             }
 
-            Eigen::MatrixXd Tanh::derivative() {
-                return Computation::factory().tanhDerivative(this->A);
+            Eigen::MatrixXd Tanh::derivative(Eigen::MatrixXd &a) {
+                return Computation::factory().tanhDerivative(a);
             }
 
             const T_String Tanh::getType() {

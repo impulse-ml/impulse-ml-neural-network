@@ -30,7 +30,7 @@ namespace Impulse {
 
                     if (this->previousLayer != nullptr) {
                         Eigen::MatrixXd tmp1 = this->layer->W.transpose() * sigma;
-                        Eigen::MatrixXd tmp2 = this->previousLayer->derivative();
+                        Eigen::MatrixXd tmp2 = this->previousLayer->derivative(this->previousLayer->A);
 
                         return tmp1.array() * tmp2.array();
                     }
