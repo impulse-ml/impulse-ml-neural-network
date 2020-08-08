@@ -54,5 +54,11 @@ namespace Impulse {
 
             return result;
         }
+
+        void Dataset::shuffle() {
+            unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+            auto rng = std::default_random_engine(seed);
+            std::shuffle(this->data.begin(), this->data.end(), rng);
+        }
     }
 }

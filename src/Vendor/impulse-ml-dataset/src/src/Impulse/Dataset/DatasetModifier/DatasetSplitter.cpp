@@ -25,6 +25,10 @@ namespace Impulse {
 
                 return result;
             }
+
+            void DatasetSplitter::shuffle() {
+                this->dataset.shuffle();
+            }
         }
     }
 }

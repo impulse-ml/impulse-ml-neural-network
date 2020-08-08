@@ -72,7 +72,7 @@ namespace Impulse {
                                     endIterationBatch - beginIterationBatch).count();
                             std::cout << "Batch: " << (offset + 1) << "/" << ceil((double) numberOfExamples / batchSize)
                                       << " | Time: " << durationBatch << "ms"
-                                      << std::endl;
+                                      << "\r";
                         }
                     }
 
@@ -88,6 +88,10 @@ namespace Impulse {
                                       << "% | Time: " << duration << "ms"
                                       << std::endl;
                         }
+                    }
+
+                    if (this->stepCallbackSet) {
+                        this->stepCallback();
                     }
                 }
 

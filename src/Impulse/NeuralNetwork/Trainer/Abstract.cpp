@@ -250,6 +250,33 @@ namespace Impulse {
             template
             Impulse::NeuralNetwork::Trainer::CostGradientResult
             AbstractTrainer<Optimizer::Rmsprop>::cost(Impulse::Dataset::SlicedDataset &dataSet, bool rollGradient);
+
+            template<typename OPTIMIZER_TYPE>
+            void AbstractTrainer<OPTIMIZER_TYPE>::setStepCallback(std::function<void ()> callback) {
+                this->stepCallback = callback;
+                this->stepCallbackSet = true;
+            }
+
+            template
+            void AbstractTrainer<Optimizer::Adam>::setStepCallback(std::function<void ()>);
+
+            template
+            void AbstractTrainer<Optimizer::Nesterov>::setStepCallback(std::function<void ()>);
+
+            template
+            void AbstractTrainer<Optimizer::Adadelta>::setStepCallback(std::function<void ()>);
+
+            template
+            void AbstractTrainer<Optimizer::Rmsprop>::setStepCallback(std::function<void ()>);
+
+            template
+            void AbstractTrainer<Optimizer::Momentum>::setStepCallback(std::function<void ()>);
+
+            template
+            void AbstractTrainer<Optimizer::GradientDescent>::setStepCallback(std::function<void ()>);
+
+            template
+            void AbstractTrainer<Optimizer::Adagrad>::setStepCallback(std::function<void ()>);
         }
     }
 }

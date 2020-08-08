@@ -30,6 +30,8 @@ namespace Impulse {
             T_Size getColumnsSize();
 
             Eigen::MatrixXd exportToEigen();
+
+            void shuffle();
         };
     }
 }

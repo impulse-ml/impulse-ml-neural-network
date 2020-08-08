@@ -16,6 +16,7 @@
 #include <chrono>
 #include <utility>
 #include <memory>
+#include <random>
 
 #include "common.h"
 #include "DatasetSample.h"

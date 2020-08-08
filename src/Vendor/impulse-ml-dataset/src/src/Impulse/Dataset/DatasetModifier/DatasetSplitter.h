@@ -23,6 +23,8 @@ namespace Impulse {
                 explicit DatasetSplitter(Dataset &slicedDataset);
 
                 SplitDataset split(double ratio);
+
+                void shuffle();
             };
         }
     }

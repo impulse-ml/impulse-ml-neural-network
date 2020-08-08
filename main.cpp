@@ -164,8 +164,9 @@ void test_conv_mnist() {
 
 SlicedDataset getMnistDataset() {
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-            "../data/mnist_test_1000.csv");
+            "../data/mnist_test.csv");
     Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
+
     Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
     slicer.addOutputColumn(0);
     for (int i = 0; i < 28 * 28; i++) {
@@ -174,8 +175,24 @@ SlicedDataset getMnistDataset() {
 
     Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
 
-    //Impulse::Dataset::DatasetModifier::Modifier::MinMaxScaling modifier2(slicedDataset.input);
-    //modifier2.apply();
+    Impulse::Dataset::DatasetModifier::Modifier::Category modifier3(slicedDataset.output);
+    modifier3.applyToColumn(0);
+
+    return slicedDataset;
+}
+
+SlicedDataset getMnistTestDataset() {
+    Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
+            "../data/mnist_test_1000.csv");
+    Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
+
+    Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
+    slicer.addOutputColumn(0);
+    for (int i = 0; i < 28 * 28; i++) {
+        slicer.addInputColumn(i + 1);
+    }
+
+    Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
 
     Impulse::Dataset::DatasetModifier::Modifier::Category modifier3(slicedDataset.output);
     modifier3.applyToColumn(0);
@@ -185,6 +202,7 @@ SlicedDataset getMnistDataset() {
 
 void test_mnist_minibatch_gradient_descent() {
     SlicedDataset dataset = getMnistDataset();
+    SlicedDataset testDataset = getMnistTestDataset();
 
     Builder::ClassifierBuilder builder({28*28});
     builder.createLayer<Layer::Tanh>([](auto * layer) {
@@ -200,11 +218,17 @@ void test_mnist_minibatch_gradient_descent() {
     Network::ClassifierNetwork net = builder.getNetwork();
 
     Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
-    trainer.setLearningIterations(3);
+    trainer.setLearningIterations(4);
     trainer.setVerboseStep(1);
-    trainer.setRegularization(0.0);
+    trainer.setRegularization(0.05);
     trainer.setVerbose(true);
-    trainer.setLearningRate(0.2);
+    trainer.setLearningRate(0.1);
+    trainer.setStepCallback([&trainer, &testDataset]() {
+        Trainer::CostGradientResult cost = trainer.cost(testDataset);
+        std::cout << "___STEP___" << std::endl;
+        std::cout << "Cost: " << cost.getCost() << std::endl;
+        std::cout << "Accuracy: " << cost.getAccuracy() << "%" << std::endl;
+    });
 
     Trainer::CostGradientResult cost = trainer.cost(dataset);
     std::cout << "Cost: " << cost.getCost() << std::endl;

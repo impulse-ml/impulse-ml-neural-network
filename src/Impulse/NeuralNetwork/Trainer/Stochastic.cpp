@@ -70,6 +70,10 @@ namespace Impulse {
                         }
                     }
 
+                    if (this->stepCallbackSet) {
+                        this->stepCallback();
+                    }
+
                     if (currentResult.getCost() > result.getCost()) {
                         std::cout << "Terminated." << std::endl;
                         break;

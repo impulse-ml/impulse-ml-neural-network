@@ -19,7 +19,9 @@ namespace Impulse {
                 double learningRate = 0.1;                      // learning rate
                 bool verbose = true;                            // if display messages
                 int verboseStep = 100;                          // step for displaying messages
-                OPTIMIZER_TYPE *optimizer = nullptr;           // optimizer
+                OPTIMIZER_TYPE *optimizer = nullptr;            // optimizer
+                std::function<void()> stepCallback;             // step callback
+                bool stepCallbackSet = false;                   // just flag
             public:
                 /**
                  * Constructor.
@@ -69,6 +71,8 @@ namespace Impulse {
                  * @param dataSet
                  */
                 virtual void train(Impulse::Dataset::SlicedDataset &dataSet) = 0;
+
+                void setStepCallback(std::function<void()>);
             };
         }
     }

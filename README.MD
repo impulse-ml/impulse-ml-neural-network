@@ -54,7 +54,6 @@ As you see layers and be configured with size so the builder also.
     trainer.setRegularization(0.01);
     trainer.setVerbose(true);
     trainer.setLearningRate(0.01);
-    trainer.setOptimizer("adam");
 ```
 
 Available trainers:
@@ -103,6 +102,17 @@ Trainer::Optimizer::GradientDescent
 
 ```c++
     std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+```
+
+##### Step callback.
+
+```c++
+trainer.setStepCallback([&trainer, &testDataset]() {
+    Trainer::CostGradientResult cost = trainer.cost(testDataset);
+    std::cout << "___STEP___" << std::endl;
+    std::cout << "Cost: " << cost.getCost() << std::endl;
+    std::cout << "Accuracy: " << cost.getAccuracy() << "%" << std::endl;
+});
 ```
 
 ## Layer types
