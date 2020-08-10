@@ -190,20 +190,19 @@ namespace Impulse {
         }
 
         void ComputationCpu::gradientAdagrad(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
             double epsilon = 1e-8;
 
             layer->cW = layer->cW.array() + layer->gW.unaryExpr([](double x) {
                 return std::pow(x, 2);
             }).array();
-            layer->W = layer->W.array() - (alpha * layer->gW.array() / layer->cW.unaryExpr([epsilon](double x) {
+            layer->W = layer->W.array() - (learningRate * layer->gW.array() / layer->cW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array());
 
             layer->cB = layer->cB.array() + layer->gB.unaryExpr([](double x) {
                 return std::pow(x, 2);
             }).array();
-            layer->b = layer->b.array() - (alpha * layer->gB.array() / layer->cB.unaryExpr([epsilon](double x) {
+            layer->b = layer->b.array() - (learningRate * layer->gB.array() / layer->cB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array());
         }

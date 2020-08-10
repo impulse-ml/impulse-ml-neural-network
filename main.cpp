@@ -177,7 +177,7 @@ void test_mnist_minibatch_gradient_descent() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatch<Trainer::Optimizer::Nesterov> trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Adagrad> trainer(net);
     trainer.setLearningIterations(3);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.05);

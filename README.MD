@@ -66,6 +66,7 @@ Available optimizers:
 ```c++
 Trainer::Optimizer::Adam
 Trainer::Optimizer::Adadelta
+Trainer::Optimizer::Adagrad
 Trainer::Optimizer::GradientDescent
 Trainer::Optimizer::Nesterov
 Trainer::Optimizer::Rmsprop
