@@ -67,6 +67,7 @@ Available optimizers:
 Trainer::Optimizer::Adam
 Trainer::Optimizer::Adadelta
 Trainer::Optimizer::GradientDescent
+Trainer::Optimizer::Nesterov
 Trainer::Optimizer::Rmsprop
 ```
 

@@ -209,20 +209,18 @@ namespace Impulse {
         }
 
         void ComputationCpu::gradientNesterov(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
             double gamma = 0.9;
 
             Eigen::MatrixXd s_prev = layer->cW;
 
-            layer->cW = (gamma * layer->cW.array()) + (alpha * layer->gW.array());
-            layer->W = layer->W.array() - ((1.0 + gamma) * layer->cW.array() - gamma * s_prev.array());
+            layer->cW = (gamma * layer->cW.array()) - (learningRate * layer->gW.array());
+            layer->W = layer->W.array() + layer->cW.array() + (gamma * (layer->cW.array() - s_prev.array()));
 
-            //
 
             Eigen::VectorXd s_prev_b = layer->cB;
 
-            layer->cB = (gamma * layer->cB.array()) + (alpha * layer->gB.array());
-            layer->b = layer->b.array() - ((1.0 + gamma) * layer->cB.array() - gamma * s_prev_b.array());
+            layer->cB = (gamma * layer->cB.array()) - (learningRate * layer->gB.array());
+            layer->b = layer->b.array() + layer->cB.array() + (gamma * (layer->cB.array() - s_prev_b.array()));
         }
 
         void ComputationCpu::gradientMomentum(Layer::Abstract *layer, double learningRate, T_Size batchSize) {

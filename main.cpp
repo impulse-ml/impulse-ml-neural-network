@@ -177,7 +177,7 @@ void test_mnist_minibatch_gradient_descent() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatch<Trainer::Optimizer::Adadelta> trainer(net);
+    Trainer::MiniBatch<Trainer::Optimizer::Nesterov> trainer(net);
     trainer.setLearningIterations(3);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.05);
@@ -202,7 +202,7 @@ void test_mnist_minibatch_gradient_descent() {
     auto duration = duration_cast<seconds>(t2 - t1).count();
     std::cout << "Time: " << duration << std::endl;
     high_resolution_clock::time_point t3 = high_resolution_clock::now();
-    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    std::cout << "Forward:" << std::endl << net.forward(testDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
     high_resolution_clock::time_point t4 = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(t4 - t3).count();
     std::cout << "Forward time: " << duration2 << " microseconds." << std::endl;
