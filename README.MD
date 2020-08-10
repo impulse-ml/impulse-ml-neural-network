@@ -65,6 +65,7 @@ Trainer::Stochastic
 Available optimizers:
 ```c++
 Trainer::Optimizer::Adam
+Trainer::Optimizer::Adadelta
 Trainer::Optimizer::GradientDescent
 Trainer::Optimizer::Rmsprop
 ```

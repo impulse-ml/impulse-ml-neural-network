@@ -36,46 +36,6 @@ Impulse::Dataset::SlicedDataset getDataset() {
     return dataset;
 }
 
-void test1() {
-    Impulse::Dataset::SlicedDataset dataset = getDataset();
-
-    Builder::ClassifierBuilder builder({400});
-    builder.createLayer<Layer::Relu>([](auto * layer) {
-        layer->setSize(100);
-    });
-    builder.createLayer<Layer::Relu>([](auto * layer) {
-        layer->setSize(20);
-    });
-    builder.createLayer<Layer::Softmax>([](auto * layer) {
-        layer->setSize(10);
-    });
-
-    Network::ClassifierNetwork net = builder.getNetwork();
-
-    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
-    trainer.setLearningIterations(2);
-    trainer.setVerboseStep(1);
-    trainer.setRegularization(0.0);
-    trainer.setVerbose(true);
-    trainer.setLearningRate(0.05);
-
-    Trainer::CostGradientResult cost = trainer.cost(dataset);
-    std::cout << "Cost: " << cost.getCost() << std::endl;
-    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
-
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    trainer.train(dataset);
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-
-    auto duration = duration_cast<seconds>(t2 - t1).count();
-    std::cout << "Time: " << duration << std::endl;
-    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
-    std::cout << "Cost: " << trainer.cost(dataset).getCost() << std::endl;
-
-    Serializer serializer(net);
-    serializer.toJSON("../saved/test1.json");
-}
-
 void test_conv_mnist() {
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
             "../data/mnist_test_1000.csv");
@@ -217,8 +177,8 @@ void test_mnist_minibatch_gradient_descent() {
 
     Network::ClassifierNetwork net = builder.getNetwork();
 
-    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
-    trainer.setLearningIterations(4);
+    Trainer::MiniBatch<Trainer::Optimizer::Adadelta> trainer(net);
+    trainer.setLearningIterations(3);
     trainer.setVerboseStep(1);
     trainer.setRegularization(0.05);
     trainer.setVerbose(true);
@@ -279,7 +239,6 @@ void test_mnist_minibatch_gradient_descent_restore() {
 }
 
 int main() {
-    //test1();
     test_mnist_minibatch_gradient_descent();
     //test_mnist_minibatch_gradient_descent_restore();
     //test_conv_mnist();

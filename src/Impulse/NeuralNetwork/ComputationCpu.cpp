@@ -238,26 +238,30 @@ namespace Impulse {
 
         void ComputationCpu::gradientAdadelta(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             //double alpha = learningRate / (double) batchSize;
-            double gamma = 0.95;
+            double gamma = 0.9;
             double epsilon = 1e-6;
 
             layer->cW = (gamma * layer->cW.array()) + (1.0 - gamma) * (layer->gW.array() * layer->gW.array());
-            layer->W = layer->W.array() - (layer->gW.array() * (layer->vW.unaryExpr([epsilon](double x) {
+            Eigen::MatrixXd deltaParameters = - (layer->vW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array() / layer->cW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array()).array());
-            layer->vW = gamma * layer->vW.array() + (1.0 - gamma) * (layer->W.array() * layer->W.array());
-
-            layer->cB = (gamma * layer->cB.array()) + (1.0 - gamma) * (layer->gB.array() * layer->gB.unaryExpr([](double x) {
+            }).array()).array() * layer->gW.array();
+            layer->vW = (gamma * layer->cW.array()) + ((1.0 - gamma) * (deltaParameters.unaryExpr([](double x) {
                 return std::pow(x, 2);
-            }).array());
-            layer->b = layer->b.array() - (layer->gB.array() * (layer->vB.unaryExpr([epsilon](double x) {
+            }).array()));
+            layer->W = layer->W.array() + deltaParameters.array();
+
+            layer->cB = (gamma * layer->cB.array()) + (1.0 - gamma) * (layer->gB.array() * layer->gB.array());
+            Eigen::MatrixXd deltaParameters2 = - (layer->vB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array() / layer->cB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array()).array());
-            layer->vB = gamma * layer->vB.array() + (1.0 - gamma) * (layer->b.array() * layer->b.array());
+            }).array()) * layer->gB.array();
+            layer->vB = (gamma * layer->cB.array()) + ((1.0 - gamma) * (deltaParameters2.unaryExpr([](double x) {
+                return std::pow(x, 2);
+            }).array()));
+            layer->b = layer->b.array() + deltaParameters2.array();
         }
     }
 }
