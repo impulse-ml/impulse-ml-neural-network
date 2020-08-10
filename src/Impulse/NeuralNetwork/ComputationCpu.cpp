@@ -174,19 +174,19 @@ namespace Impulse {
         }
 
         void ComputationCpu::gradientRmsProp(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            double alpha = learningRate / (double) batchSize;
+            double alpha = 1e-3;
             double gamma = 0.9;
             double epsilon = 1e-8;
 
             layer->cW = gamma * layer->cW.array() + (1.0 - gamma) * (layer->gW.array() * layer->gW.array());
-            layer->W = layer->gW.array() * alpha / layer->cW.unaryExpr([epsilon](double x) {
+            layer->W = layer->W.array() - (layer->gW.array() * alpha / layer->cW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array();
+            }).array());
 
             layer->cB = gamma * layer->cB.array() + (1.0 - gamma) * (layer->gB.array() * layer->gB.array());
-            layer->b = layer->gB.array() * alpha / layer->cB.unaryExpr([epsilon](double x) {
+            layer->b = layer->b.array() - (layer->gB.array() * alpha / layer->cB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array();
+            }).array());
         }
 
         void ComputationCpu::gradientAdagrad(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
@@ -238,27 +238,25 @@ namespace Impulse {
 
         void ComputationCpu::gradientAdadelta(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
             //double alpha = learningRate / (double) batchSize;
-            double gamma = 0.9;
+            double gamma = 0.95;
             double epsilon = 1e-6;
 
-            layer->cW = (gamma * layer->cW.array()) + (1.0 - gamma) * (layer->gW.unaryExpr([](double x) {
-                return std::pow(x, 2);
-            }).array());
-            layer->W = layer->gW.array() * (layer->vW.unaryExpr([epsilon](double x) {
+            layer->cW = (gamma * layer->cW.array()) + (1.0 - gamma) * (layer->gW.array() * layer->gW.array());
+            layer->W = layer->W.array() - (layer->gW.array() * (layer->vW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array() / layer->cW.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array()).array();
+            }).array()).array());
             layer->vW = gamma * layer->vW.array() + (1.0 - gamma) * (layer->W.array() * layer->W.array());
 
             layer->cB = (gamma * layer->cB.array()) + (1.0 - gamma) * (layer->gB.array() * layer->gB.unaryExpr([](double x) {
                 return std::pow(x, 2);
             }).array());
-            layer->b = layer->gB.array() * (layer->vB.unaryExpr([epsilon](double x) {
+            layer->b = layer->b.array() - (layer->gB.array() * (layer->vB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
             }).array() / layer->cB.unaryExpr([epsilon](double x) {
                 return std::sqrt(x + epsilon);
-            }).array()).array();
+            }).array()).array());
             layer->vB = gamma * layer->vB.array() + (1.0 - gamma) * (layer->b.array() * layer->b.array());
         }
     }

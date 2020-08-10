@@ -66,6 +66,7 @@ Available optimizers:
 ```c++
 Trainer::Optimizer::Adam
 Trainer::Optimizer::GradientDescent
+Trainer::Optimizer::Rmsprop
 ```
 
 ##### Step 4: Train the network.
