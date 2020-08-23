@@ -47,7 +47,7 @@ namespace Impulse {
 
                 T_Size getNumFilters();
 
-                Eigen::MatrixXd activation(Eigen::MatrixXd &m) override;
+                Eigen::MatrixXd activation() override;
 
                 Eigen::MatrixXd derivative(Eigen::MatrixXd &a) override;
 

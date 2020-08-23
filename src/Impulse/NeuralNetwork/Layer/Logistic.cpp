@@ -8,12 +8,13 @@ namespace Impulse {
 
             Logistic::Logistic() : Abstract1D() {};
 
-            Eigen::MatrixXd Logistic::activation(Eigen::MatrixXd &m) {
-                return Computation::factory().logisticActivation(m);
+            Eigen::MatrixXd Logistic::activation() {
+                this->computation->logisticActivation();
+                return this->computation->getVariable("A");
             }
 
             Eigen::MatrixXd Logistic::derivative(Eigen::MatrixXd &a) {
-                return Computation::factory().logisticDerivative(a);
+                return this->computation->logisticDerivative(a);
             }
 
             const T_String Logistic::getType() {
@@ -21,7 +22,7 @@ namespace Impulse {
             }
 
             double Logistic::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
-                return Computation::factory().logisticLoss(output, predictions);
+                return this->computation->logisticLoss(output, predictions);
             }
 
             double Logistic::error(T_Size m) {

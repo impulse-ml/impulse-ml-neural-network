@@ -31,6 +31,7 @@ namespace Impulse {
                         int currentResultRow = 0;
                         for (int channel = 0; channel < channels; channel++) {
                             int inputOffset = height * width * channel;
+#pragma omp parallel for collapse(2)
                             for (int y = 0; y < kernel_h; y++) {
                                 for (int x = 0; x < kernel_w; x++) {
                                     if (boundingY + y >= 0 && boundingX + x >= 0 && boundingX + x < width &&

@@ -9,7 +9,7 @@ namespace Impulse {
             namespace Optimizer {
 
                 void GradientDescent::optimize(Layer::Abstract *layer) {
-                    Computation::factory().gradientDescent(layer, this->learningRate);
+                    layer->getComputation()->gradientDescent(this->learningRate);
                 }
             }
         }

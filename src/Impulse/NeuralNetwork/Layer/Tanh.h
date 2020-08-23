@@ -17,7 +17,7 @@ namespace Impulse {
             public:
                 Tanh();
 
-                Eigen::MatrixXd activation(Eigen::MatrixXd &m) override;
+                Eigen::MatrixXd activation() override;
 
                 Eigen::MatrixXd derivative(Eigen::MatrixXd &a) override;
 

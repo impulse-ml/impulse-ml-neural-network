@@ -8,12 +8,13 @@ namespace Impulse {
 
             Tanh::Tanh() : Abstract1D() {};
 
-            Eigen::MatrixXd Tanh::activation(Eigen::MatrixXd &m) {
-                return Computation::factory().tanhActivation(m);
+            Eigen::MatrixXd Tanh::activation() {
+                this->computation->tanhActivation();
+                return this->computation->getVariable("A");
             }
 
             Eigen::MatrixXd Tanh::derivative(Eigen::MatrixXd &a) {
-                return Computation::factory().tanhDerivative(a);
+                return this->computation->tanhDerivative(a);
             }
 
             const T_String Tanh::getType() {

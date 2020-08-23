@@ -9,7 +9,7 @@ namespace Impulse {
             namespace Optimizer {
 
                 void Rmsprop::optimize(Layer::Abstract *layer) {
-                    Computation::factory().gradientRmsProp(layer, this->learningRate, this->batchSize);
+                    layer->getComputation()->gradientRmsProp(this->learningRate, this->batchSize);
                 }
             }
         }

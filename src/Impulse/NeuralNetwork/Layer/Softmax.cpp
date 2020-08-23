@@ -8,12 +8,13 @@ namespace Impulse {
 
             Softmax::Softmax() : Abstract1D() {}
 
-            Eigen::MatrixXd Softmax::activation(Eigen::MatrixXd &m) {
-                return Computation::factory().softmaxActivation(m);
+            Eigen::MatrixXd Softmax::activation() {
+                this->computation->softmaxActivation();
+                return this->computation->getVariable("A");
             }
 
             Eigen::MatrixXd Softmax::derivative(Eigen::MatrixXd &a) {
-                return Computation::factory().softmaxDerivative(a);
+                return this->computation->softmaxDerivative(a);
             }
 
             const T_String Softmax::getType() {
@@ -21,7 +22,7 @@ namespace Impulse {
             }
 
             double Softmax::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
-                return Computation::factory().softmaxLoss(output, predictions);
+                return this->computation->softmaxLoss(output, predictions);
             }
 
             double Softmax::error(T_Size m) {

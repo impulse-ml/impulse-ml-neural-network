@@ -9,7 +9,7 @@ namespace Impulse {
             namespace Optimizer {
 
                 void Nesterov::optimize(Layer::Abstract *layer) {
-                    Computation::factory().gradientNesterov(layer, this->learningRate, this->batchSize);
+                    layer->getComputation()->gradientNesterov(this->learningRate, this->batchSize);
                 }
             }
         }

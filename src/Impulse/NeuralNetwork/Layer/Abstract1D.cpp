@@ -10,36 +10,38 @@ namespace Impulse {
 
             void Abstract1D::configure() {
                 // initialize weights
-                this->W.resize(this->height, this->width);
-                this->W = Computation::factory().randomInit(this->W, this->width);
+                this->computation->resize("W", this->height, this->width);
+                this->computation->randomInit("W", width);
 
                 // initialize bias
-                this->b.resize(this->height);
-                this->b = Computation::factory().randomInit(this->b, this->width);
+                this->computation->resize("b", this->height, 1);
+                this->computation->randomInit("b", width);
 
-                this->gW.resize(this->height, this->width);
-                this->gW.setZero();
+                // initialize gradient
+                this->computation->resize("gW", this->height, this->width);
+                this->computation->setZero("gW");
 
-                this->gB.resize(this->height);
-                this->gB.setZero();
+                this->computation->resize("gB", this->height, 1);
+                this->computation->setZero("gB");
 
-                this->cW.resize(this->height, this->width);
-                this->cW.setZero();
+                // initialize optimizer variables
+                this->computation->resize("cW", this->height, this->width);
+                this->computation->setZero("cW");
 
-                this->cB.resize(this->height);
-                this->cB.setZero();
+                this->computation->resize("cB", this->height, 1);
+                this->computation->setZero("cB");
 
-                this->vW.resize(this->height, this->width);
-                this->vW.setZero();
+                this->computation->resize("vW", this->height, this->width);
+                this->computation->setZero("vW");
 
-                this->vB.resize(this->height);
-                this->vB.setZero();
+                this->computation->resize("vB", this->height, 1);
+                this->computation->setZero("vB");
 
-                this->wW.resize(this->height, this->width);
-                this->wW.setZero();
+                this->computation->resize("wW", this->height, this->width);
+                this->computation->setZero("wW");
 
-                this->wB.resize(this->height);
-                this->wB.setZero();
+                this->computation->resize("wB", this->height, 1);
+                this->computation->setZero("wB");
             }
 
             bool Abstract1D::is1D() {

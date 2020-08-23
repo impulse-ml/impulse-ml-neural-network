@@ -9,7 +9,7 @@ namespace Impulse {
             namespace Optimizer {
 
                 void Adam::optimize(Layer::Abstract *layer) {
-                    Computation::factory().gradientAdam(layer, this->learningRate, this->t);
+                    layer->getComputation()->gradientAdam(this->learningRate, this->t);
                 }
             }
         }

@@ -5,113 +5,120 @@ namespace Impulse {
     namespace NeuralNetwork {
 
         Computation::Computation() : AbstractComputation() {
-
+            this->computation = new ComputationCpu();
         }
 
-        Computation Computation::factory() {
-            Computation instance;
-            return instance;
+        Eigen::MatrixXd &Computation::getVariable(T_String name) {
+            return this->computation->getVariable(name);
+        }
+
+        void Computation::setVariable(T_String name, Eigen::MatrixXd variable) {
+            this->computation->setVariable(name, variable);
+        }
+
+        void Computation::initialize(T_String name) {
+            this->computation->initialize(name);
         }
 
         Eigen::MatrixXd
-        Computation::forward(const Eigen::MatrixXd &W, const Eigen::MatrixXd &input, const Eigen::VectorXd &b) {
-            return ComputationCpu::factory().forward(W, input, b);
+        Computation::forward(const Eigen::MatrixXd &input) {
+            return this->computation->forward(input);
         }
 
-        Eigen::MatrixXd Computation::randomInit(Eigen::MatrixXd &mat, T_Size width) {
-            return ComputationCpu::factory().randomInit(mat, width);
+        void Computation::resize(T_String name, T_Size width, T_Size height) {
+            this->computation->resize(name, width, height);
         }
 
-        Eigen::VectorXd Computation::randomInit(Eigen::VectorXd &vec, T_Size width) {
-            return ComputationCpu::factory().randomInit(vec, width);
+        void Computation::setZero(T_String name) {
+            this->computation->setZero(name);
         }
 
-        Eigen::VectorXd Computation::staticInit(Eigen::VectorXd &vec, double num) {
-            return ComputationCpu::factory().staticInit(vec, num);
+        void Computation::randomInit(T_String name, double parameter) {
+            this->computation->randomInit(name, parameter);
         }
 
-        Eigen::MatrixXd Computation::reluActivation(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().reluActivation(m);
+        void Computation::reluActivation() {
+            return this->computation->reluActivation();
         }
 
         Eigen::MatrixXd Computation::reluDerivative(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().reluDerivative(m);
+            return this->computation->reluDerivative(m);
         }
 
-        Eigen::MatrixXd Computation::logisticActivation(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().logisticActivation(m);
+        void Computation::logisticActivation() {
+            return this->computation->logisticActivation();
         }
 
         Eigen::MatrixXd Computation::logisticDerivative(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().logisticDerivative(m);
+            return this->computation->logisticDerivative(m);
         }
 
-        Eigen::MatrixXd Computation::softmaxActivation(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().softmaxActivation(m);
+        void Computation::softmaxActivation() {
+            return this->computation->softmaxActivation();
         }
 
         Eigen::MatrixXd Computation::softmaxDerivative(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().softmaxDerivative(m);
+            return this->computation->softmaxDerivative(m);
         }
 
-        Eigen::MatrixXd Computation::softplusActivation(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().softplusActivation(m);
+        void Computation::softplusActivation() {
+            return this->computation->softplusActivation();
         }
 
         Eigen::MatrixXd Computation::softplusDerivative(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().softplusDerivative(m);
+            return this->computation->softplusDerivative(m);
         }
 
-        Eigen::MatrixXd Computation::tanhActivation(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().tanhActivation(m);
+        void Computation::tanhActivation() {
+            return this->computation->tanhActivation();
         }
 
         Eigen::MatrixXd Computation::tanhDerivative(Eigen::MatrixXd &m) {
-            return ComputationCpu::factory().tanhDerivative(m);
+            return this->computation->tanhDerivative(m);
         }
 
         double Computation::logisticLoss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
-            return ComputationCpu::factory().logisticLoss(output, predictions);
+            return this->computation->logisticLoss(output, predictions);
         }
 
         double Computation::purelinLoss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
-            return ComputationCpu::factory().purelinLoss(output, predictions);
+            return this->computation->purelinLoss(output, predictions);
         }
 
         double Computation::softmaxLoss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
-            return ComputationCpu::factory().softmaxLoss(output, predictions);
+            return this->computation->softmaxLoss(output, predictions);
         }
 
-        void Computation::gradientDescent(Layer::Abstract *layer, double learningRate) {
-            ComputationCpu::factory().gradientDescent(layer, learningRate);
+        double Computation::penalty() {
+            return this->computation->penalty();
         }
 
-        double Computation::layerPenalty(Eigen::MatrixXd &W) {
-            return ComputationCpu::factory().layerPenalty(W);
+        void Computation::gradientDescent(double learningRate) {
+            this->computation->gradientDescent(learningRate);
         }
 
-        void Computation::gradientAdam(Layer::Abstract *layer, double learningRate, T_Size t) {
-            ComputationCpu::factory().gradientAdam(layer, learningRate, t);
+        void Computation::gradientAdam(double learningRate, T_Size t) {
+            this->computation->gradientAdam(learningRate, t);
         }
 
-        void Computation::gradientRmsProp(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            ComputationCpu::factory().gradientRmsProp(layer, learningRate, batchSize);
+        void Computation::gradientRmsProp(double learningRate, T_Size batchSize) {
+            this->computation->gradientRmsProp(learningRate, batchSize);
         }
 
-        void Computation::gradientAdagrad(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            ComputationCpu::factory().gradientAdagrad(layer, learningRate, batchSize);
+        void Computation::gradientAdagrad(double learningRate, T_Size batchSize) {
+            this->computation->gradientAdagrad(learningRate, batchSize);
         }
 
-        void Computation::gradientNesterov(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            ComputationCpu::factory().gradientNesterov(layer, learningRate, batchSize);
+        void Computation::gradientNesterov(double learningRate, T_Size batchSize) {
+            this->computation->gradientNesterov(learningRate, batchSize);
         }
 
-        void Computation::gradientMomentum(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            ComputationCpu::factory().gradientMomentum(layer, learningRate, batchSize);
+        void Computation::gradientMomentum(double learningRate, T_Size batchSize) {
+            this->computation->gradientMomentum(learningRate, batchSize);
         }
 
-        void Computation::gradientAdadelta(Layer::Abstract *layer, double learningRate, T_Size batchSize) {
-            ComputationCpu::factory().gradientAdadelta(layer, learningRate, batchSize);
+        void Computation::gradientAdadelta(double learningRate, T_Size batchSize) {
+            this->computation->gradientAdadelta(learningRate, batchSize);
         }
     }
 }

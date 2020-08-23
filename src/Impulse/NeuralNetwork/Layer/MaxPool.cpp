@@ -29,12 +29,12 @@ namespace Impulse {
             }
 
             Eigen::MatrixXd MaxPool::forward(const Eigen::MatrixXd &input) {
-                this->Z = input;
+                this->computation->setVariable("Z", input);
+
                 Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(),
                                        input.cols());
 
 #pragma omp parallel
-#pragma omp for
                 for (T_Size i = 0; i < input.cols(); i++) {
                     result.col(i) = Utils::maxpool(input.col(i), this->depth,
                                                    this->height, this->width,
@@ -45,7 +45,7 @@ namespace Impulse {
                 return result;
             }
 
-            Eigen::MatrixXd MaxPool::activation(Eigen::MatrixXd &m) {
+            Eigen::MatrixXd MaxPool::activation() {
                 static_assert("No activation for MAXPOOL layer.", "");
                 return Eigen::MatrixXd(); // no activation for maxpool layer
             }

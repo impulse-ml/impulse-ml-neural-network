@@ -33,12 +33,13 @@ namespace Impulse {
 
                     Eigen::MatrixXd result(inputWidth * inputHeight * inputDepth, numberOfExamples);
 
-                    Eigen::MatrixXd aPrev = previousLayer->derivative(previousLayer->A);
+                    Eigen::MatrixXd aPrev = previousLayer->derivative(
+                            previousLayer->getComputation()->getVariable("A"));
 
-                    previousLayer->gW.setZero();
-                    previousLayer->gB.setZero();
+                    previousLayer->getComputation()->setZero("gW");
+                    previousLayer->getComputation()->setZero("gB");
 
-#pragma omp parallel for collapse(4)
+#pragma omp parallel for collapse(1)
                     for (int m = 0; m < numberOfExamples; m++) {
                         for (int c = 0; c < outputDepth; c++) {
                             for (int h = 0; h < outputHeight; h++) {
@@ -57,27 +58,34 @@ namespace Impulse {
                                                 tmpResult(((d * (inputWidth + 2 * padding) *
                                                             (inputHeight + 2 * padding)) +
                                                            (vertical * (inputWidth + 2 * padding)) + horizontal), m) +=
-                                                        previousLayer->W(c, (d * filterSize * filterSize) +
-                                                                            (y * filterSize) + x) *
+                                                        previousLayer->getComputation()->getVariable("W")(c, (d *
+                                                                                                              filterSize *
+                                                                                                              filterSize) +
+                                                                                                             (y *
+                                                                                                              filterSize) +
+                                                                                                             x) *
                                                         sigma((c * outputWidth * outputHeight) + (h * outputWidth) + w,
                                                               m);
 
                                                 double z = 0;
                                                 if (padding == 0) {
-                                                    z = previousLayer->Z(
+                                                    z = previousLayer->getComputation()->getVariable("Z")(
                                                             (d * inputWidth * inputHeight) + (vertical * inputWidth) +
                                                             horizontal, m);
                                                 } else {
                                                     if (verticalPad >= 0 && horizontalPad >= 0 &&
                                                         verticalPad < inputHeight && horizontalPad < inputWidth) {
-                                                        z = previousLayer->Z((d * inputWidth * inputHeight) +
-                                                                             (verticalPad * inputWidth) + horizontalPad,
-                                                                             m);
+                                                        z = previousLayer->getComputation()->getVariable("Z")(
+                                                                (d * inputWidth * inputHeight) +
+                                                                (verticalPad * inputWidth) + horizontalPad,
+                                                                m);
                                                     }
                                                 }
 
-                                                previousLayer->gW(c, (d * filterSize * filterSize) + (y * filterSize) +
-                                                                     x) +=
+                                                previousLayer->getComputation()->getVariable("gW")(c, (d * filterSize *
+                                                                                                       filterSize) +
+                                                                                                      (y * filterSize) +
+                                                                                                      x) +=
                                                         (
                                                                 z *
                                                                 sigma(c * (outputWidth * outputHeight) +
@@ -87,7 +95,7 @@ namespace Impulse {
                                         }
                                     }
 
-                                    previousLayer->gB(c, 0) +=
+                                    previousLayer->getComputation()->getVariable("gB")(c, 0) +=
                                             sigma(c * (outputWidth * outputHeight) + (h * outputWidth) + w, m) /
                                             numberOfExamples;
                                 }

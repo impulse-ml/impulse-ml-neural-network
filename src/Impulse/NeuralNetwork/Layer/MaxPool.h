@@ -31,7 +31,7 @@ namespace Impulse {
 
                 Eigen::MatrixXd forward(const Eigen::MatrixXd &input) override;
 
-                Eigen::MatrixXd activation(Eigen::MatrixXd &m) override;
+                Eigen::MatrixXd activation() override;
 
                 Eigen::MatrixXd derivative(Eigen::MatrixXd &a) override;
 

@@ -17,7 +17,8 @@ namespace Impulse {
                                                     double regularization, const Eigen::MatrixXd &sigma) {
 
                     auto *prevLayer = (Layer::MaxPool *) this->previousLayer.get();
-                    Eigen::MatrixXd result(prevLayer->Z.rows(), prevLayer->Z.cols());
+                    Eigen::MatrixXd result(prevLayer->getComputation()->getVariable("Z").rows(),
+                                           prevLayer->getComputation()->getVariable("Z").cols());
                     result.setZero();
 
                     T_Size filterSize = prevLayer->getFilterSize();
@@ -47,8 +48,10 @@ namespace Impulse {
 
                                     for (T_Size y = 0, vStart = vertStart; y < filterSize; y++, vStart++) {
                                         for (T_Size x = 0, hStart = horizStart; x < filterSize; x++, hStart++) {
-                                            if (_max < prevLayer->Z(inputOffset + (vStart * inputWidth) + hStart, m)) {
-                                                _max = prevLayer->Z(inputOffset + (vStart * inputWidth) + hStart, m);
+                                            if (_max < prevLayer->getComputation()->getVariable("Z")(
+                                                    inputOffset + (vStart * inputWidth) + hStart, m)) {
+                                                _max = prevLayer->getComputation()->getVariable("Z")(
+                                                        inputOffset + (vStart * inputWidth) + hStart, m);
                                                 maxX = hStart;
                                                 maxY = vStart;
                                             }

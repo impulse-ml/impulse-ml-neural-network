@@ -9,37 +9,44 @@ namespace Impulse {
     namespace NeuralNetwork {
 
         class ComputationCpu : public AbstractComputation {
+
         private:
-            explicit ComputationCpu();
+            std::map<T_String, Eigen::MatrixXd> variables;
 
         public:
-            static ComputationCpu factory();
+            explicit ComputationCpu();
 
-            Eigen::MatrixXd forward(const Eigen::MatrixXd &, const Eigen::MatrixXd &, const Eigen::VectorXd &);
+            Eigen::MatrixXd &getVariable(T_String);
 
-            Eigen::MatrixXd randomInit(Eigen::MatrixXd &, T_Size);
+            void setVariable(T_String, Eigen::MatrixXd);
 
-            Eigen::VectorXd randomInit(Eigen::VectorXd &, T_Size);
+            void initialize(T_String);
 
-            Eigen::VectorXd staticInit(Eigen::VectorXd &, double);
+            void resize(T_String, T_Size, T_Size);
 
-            Eigen::MatrixXd reluActivation(Eigen::MatrixXd &);
+            void setZero(T_String);
+
+            void randomInit(T_String, double);
+
+            Eigen::MatrixXd forward(const Eigen::MatrixXd &);
+
+            void reluActivation();
 
             Eigen::MatrixXd reluDerivative(Eigen::MatrixXd &);
 
-            Eigen::MatrixXd logisticActivation(Eigen::MatrixXd &);
+            void logisticActivation();
 
             Eigen::MatrixXd logisticDerivative(Eigen::MatrixXd &);
 
-            Eigen::MatrixXd softmaxActivation(Eigen::MatrixXd &);
+            void softmaxActivation();
 
             Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd &);
 
-            Eigen::MatrixXd softplusActivation(Eigen::MatrixXd &);
+            void softplusActivation();
 
             Eigen::MatrixXd softplusDerivative(Eigen::MatrixXd &);
 
-            Eigen::MatrixXd tanhActivation(Eigen::MatrixXd &);
+            void tanhActivation();
 
             Eigen::MatrixXd tanhDerivative(Eigen::MatrixXd &);
 
@@ -49,21 +56,21 @@ namespace Impulse {
 
             double softmaxLoss(Eigen::MatrixXd &, Eigen::MatrixXd &);
 
-            void gradientDescent(Layer::Abstract *, double);
+            double penalty();
 
-            double layerPenalty(Eigen::MatrixXd &W);
+            void gradientDescent(double);
 
-            void gradientAdam(Layer::Abstract *, double, T_Size);
+            void gradientAdam(double, T_Size);
 
-            void gradientRmsProp(Layer::Abstract *, double, T_Size);
+            void gradientRmsProp(double, T_Size);
 
-            void gradientAdagrad(Layer::Abstract *, double, T_Size);
+            void gradientAdagrad(double, T_Size);
 
-            void gradientNesterov(Layer::Abstract *, double, T_Size);
+            void gradientNesterov(double, T_Size);
 
-            void gradientMomentum(Layer::Abstract *, double, T_Size);
+            void gradientMomentum(double, T_Size);
 
-            void gradientAdadelta(Layer::Abstract *, double, T_Size);
+            void gradientAdadelta(double, T_Size);
         };
     }
 }
