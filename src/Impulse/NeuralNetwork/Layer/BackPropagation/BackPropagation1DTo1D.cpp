@@ -20,17 +20,21 @@ namespace Impulse {
                                                                  const Eigen::MatrixXd &sigma) {
 
                     Eigen::MatrixXd previousActivations =
-                            this->previousLayer == nullptr ? input : this->previousLayer->A;
+                            this->previousLayer == nullptr ? input : this->previousLayer->getComputation()->getVariable(
+                                    "A");
 
                     Eigen::MatrixXd delta = sigma * previousActivations.transpose().conjugate();
 
-                    this->layer->gW = delta.array() / numberOfExamples +
-                                      (regularization / numberOfExamples * this->layer->W.array());
-                    this->layer->gB = sigma.rowwise().sum() / numberOfExamples;
+                    this->layer->getComputation()->setVariable("gW", delta.array() / numberOfExamples +
+                                                                     (regularization / numberOfExamples *
+                                                                      this->layer->getComputation()->getVariable(
+                                                                              "W").array()));
+                    this->layer->getComputation()->setVariable("gB", sigma.rowwise().sum() / numberOfExamples);
 
                     if (this->previousLayer != nullptr) {
-                        Eigen::MatrixXd tmp1 = this->layer->W.transpose() * sigma;
-                        Eigen::MatrixXd tmp2 = this->previousLayer->derivative(this->previousLayer->A);
+                        Eigen::MatrixXd tmp1 = this->layer->getComputation()->getVariable("W").transpose() * sigma;
+                        Eigen::MatrixXd tmp2 = this->previousLayer->derivative(
+                                this->previousLayer->getComputation()->getVariable("A"));
 
                         return tmp1.array() * tmp2.array();
                     }

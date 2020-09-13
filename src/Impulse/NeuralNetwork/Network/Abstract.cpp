@@ -61,17 +61,20 @@ namespace Impulse {
                     }
 
                     tmp.reserve(
-                            (unsigned long) (layer->W.cols() * layer->W.rows()) + (layer->b.cols() * layer->b.rows()));
+                            (unsigned long) (layer->getComputation()->getVariable("W").cols() *
+                                             layer->getComputation()->getVariable("W").rows()) +
+                            (layer->getComputation()->getVariable("b").cols() *
+                             layer->getComputation()->getVariable("b").rows()));
 
-                    for (T_Size j = 0; j < layer->W.rows(); j++) {
-                        for (T_Size k = 0; k < layer->W.cols(); k++) {
-                            tmp.push_back(layer->W(j, k));
+                    for (T_Size j = 0; j < layer->getComputation()->getVariable("W").rows(); j++) {
+                        for (T_Size k = 0; k < layer->getComputation()->getVariable("W").cols(); k++) {
+                            tmp.push_back(layer->getComputation()->getVariable("W")(j, k));
                         }
                     }
 
-                    for (T_Size j = 0; j < layer->b.rows(); j++) {
-                        for (T_Size k = 0; k < layer->b.cols(); k++) {
-                            tmp.push_back(layer->b(j, k));
+                    for (T_Size j = 0; j < layer->getComputation()->getVariable("b").rows(); j++) {
+                        for (T_Size k = 0; k < layer->getComputation()->getVariable("b").cols(); k++) {
+                            tmp.push_back(layer->getComputation()->getVariable("b")(j, k));
                         }
                     }
                 }
@@ -90,15 +93,15 @@ namespace Impulse {
                         continue;
                     }
 
-                    for (T_Size j = 0; j < layer->gW.rows(); j++) {
-                        for (T_Size k = 0; k < layer->gW.cols(); k++) {
-                            tmp.push_back(layer->gW(j, k));
+                    for (T_Size j = 0; j < layer->getComputation()->getVariable("gW").rows(); j++) {
+                        for (T_Size k = 0; k < layer->getComputation()->getVariable("gW").cols(); k++) {
+                            tmp.push_back(layer->getComputation()->getVariable("gW")(j, k));
                         }
                     }
 
-                    for (T_Size j = 0; j < layer->gB.rows(); j++) {
-                        for (T_Size k = 0; k < layer->gB.cols(); k++) {
-                            tmp.push_back(layer->gB(j, k));
+                    for (T_Size j = 0; j < layer->getComputation()->getVariable("gB").rows(); j++) {
+                        for (T_Size k = 0; k < layer->getComputation()->getVariable("gB").cols(); k++) {
+                            tmp.push_back(layer->getComputation()->getVariable("gB")(j, k));
                         }
                     }
                 }
@@ -117,15 +120,15 @@ namespace Impulse {
                         continue;
                     }
 
-                    for (T_Size j = 0; j < layer->W.rows(); j++) {
-                        for (T_Size k = 0; k < layer->W.cols(); k++) {
-                            layer->W(j, k) = theta(t++);
+                    for (T_Size j = 0; j < layer->getComputation()->getVariable("W").rows(); j++) {
+                        for (T_Size k = 0; k < layer->getComputation()->getVariable("W").cols(); k++) {
+                            layer->getComputation()->getVariable("W")(j, k) = theta(t++);
                         }
                     }
 
-                    for (T_Size j = 0; j < layer->b.rows(); j++) {
-                        for (T_Size k = 0; k < layer->b.cols(); k++) {
-                            layer->b(j, k) = theta(t++);
+                    for (T_Size j = 0; j < layer->getComputation()->getVariable("b").rows(); j++) {
+                        for (T_Size k = 0; k < layer->getComputation()->getVariable("b").cols(); k++) {
+                            layer->getComputation()->getVariable("b")(j, k) = theta(t++);
                         }
                     }
                 }

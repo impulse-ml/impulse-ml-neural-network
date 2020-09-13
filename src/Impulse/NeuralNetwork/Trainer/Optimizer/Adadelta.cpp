@@ -9,7 +9,7 @@ namespace Impulse {
             namespace Optimizer {
 
                 void Adadelta::optimize(Layer::Abstract *layer) {
-                    Computation::factory().gradientAdadelta(layer, this->learningRate, this->batchSize);
+                    layer->getComputation()->gradientAdadelta(this->learningRate, this->batchSize);
                 }
             }
         }

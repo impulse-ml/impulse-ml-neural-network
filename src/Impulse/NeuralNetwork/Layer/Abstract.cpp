@@ -6,12 +6,31 @@ namespace Impulse {
 
         namespace Layer {
 
-            Abstract::Abstract() = default;
+            Abstract::Abstract() {
+                this->computation = new Computation();
+
+                this->computation->initialize("W");
+                this->computation->initialize("b");
+                this->computation->initialize("A");
+                this->computation->initialize("Z");
+                this->computation->initialize("gW");
+                this->computation->initialize("gB");
+                this->computation->initialize("cW");
+                this->computation->initialize("cB");
+                this->computation->initialize("vW");
+                this->computation->initialize("vB");
+                this->computation->initialize("wW");
+                this->computation->initialize("wB");
+            };
+
+            Abstract::~Abstract() {
+                delete this->computation;
+            }
 
             Eigen::MatrixXd Abstract::forward(const Eigen::MatrixXd &input) {
-                this->Z = Computation::factory().forward(this->W, input, b);
-                this->A = this->activation(this->Z);
-                return this->A;
+                this->computation->forward(input);
+                this->activation();
+                return this->computation->getVariable("A");
             }
 
             void Abstract::setSize(T_Size value) {
@@ -69,7 +88,11 @@ namespace Impulse {
             }
 
             double Abstract::penalty() {
-                return Computation::factory().layerPenalty(this->W);
+                return this->computation->penalty();
+            }
+
+            Computation *Abstract::getComputation() {
+                return this->computation;
             }
         }
     }

@@ -19,109 +19,6 @@
 using namespace std::chrono;
 using namespace Impulse::NeuralNetwork;
 
-Impulse::Dataset::SlicedDataset getDataset() {
-    // create dataset
-    Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-            "/home/user/impulse-vectorized/data/ex4data1_x.csv");
-    Impulse::Dataset::Dataset datasetInput = datasetBuilder1.build();
-
-    Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder2(
-            "/home/user/impulse-vectorized/data/ex4data1_y.csv");
-    Impulse::Dataset::Dataset datasetOutput = datasetBuilder2.build();
-
-    Impulse::Dataset::SlicedDataset dataset;
-    dataset.input = datasetInput;
-    dataset.output = datasetOutput;
-
-    return dataset;
-}
-
-void test_conv_mnist() {
-    Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
-            "../data/mnist_test_1000.csv");
-    Impulse::Dataset::Dataset dataset = datasetBuilder1.build();
-    Impulse::Dataset::DatasetModifier::DatasetSlicer slicer(dataset);
-    slicer.addOutputColumn(0);
-    for (int i = 0; i < 28 * 28; i++) {
-        slicer.addInputColumn(i + 1);
-    }
-
-    Impulse::Dataset::SlicedDataset slicedDataset = slicer.slice();
-
-    Impulse::Dataset::DatasetModifier::Modifier::Category modifier2(slicedDataset.output);
-    modifier2.applyToColumn(0);
-
-    Builder::ConvBuilder builder({28, 28, 1});
-
-    builder.createLayer<Layer::Conv>([](auto *layer) {
-        layer->setFilterSize(4);
-        layer->setPadding(1);
-        layer->setStride(1);
-        layer->setNumFilters(32);
-    });
-
-    builder.createLayer<Layer::MaxPool>([](auto *layer) {
-        layer->setFilterSize(2);
-        layer->setStride(2);
-    });
-
-    builder.createLayer<Layer::Conv>([](auto *layer) {
-        layer->setFilterSize(3);
-        layer->setPadding(1);
-        layer->setStride(1);
-        layer->setNumFilters(64);
-    });
-
-    builder.createLayer<Layer::MaxPool>([](auto *layer) {
-        layer->setFilterSize(2);
-        layer->setStride(2);
-    });
-
-    builder.createLayer<Layer::FullyConnected>([](auto *layer) {
-
-    });
-
-    builder.createLayer<Layer::Relu>([](auto *layer) {
-        layer->setSize(1024);
-    });
-
-    builder.createLayer<Layer::Softmax>([](auto *layer) {
-        layer->setSize(10);
-    });
-
-    Network::ConvNetwork net = builder.getNetwork();
-
-    Trainer::MiniBatch<Trainer::Optimizer::Adam> trainer(net);
-    trainer.setLearningIterations(10);
-    trainer.setVerboseStep(1);
-    trainer.setRegularization(0.1);
-    trainer.setVerbose(true);
-    trainer.setLearningRate(0.1);
-
-    Trainer::CostGradientResult cost = trainer.cost(slicedDataset);
-    std::cout << "Cost: " << cost.getCost() << std::endl;
-    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
-
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    trainer.train(slicedDataset);
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-
-    auto duration = duration_cast<seconds>(t2 - t1).count();
-    std::cout << "Time: " << duration << std::endl;
-    high_resolution_clock::time_point t3 = high_resolution_clock::now();
-    std::cout << "Forward:" << std::endl << net.forward(slicedDataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
-    high_resolution_clock::time_point t4 = high_resolution_clock::now();
-    auto duration2 = duration_cast<milliseconds>(t4 - t3).count();
-    std::cout << "Time forward: " << duration2 << std::endl;
-    std::cout << "Cost: " << trainer.cost(slicedDataset).getCost() << std::endl;
-    high_resolution_clock::time_point t5 = high_resolution_clock::now();
-    auto duration3 = duration_cast<milliseconds>(t5 - t4).count();
-    std::cout << "Time cost: " << duration3 << std::endl;
-
-    Serializer serializer(net);
-    serializer.toJSON("../saved/test_conv_mnist.json");
-}
-
 SlicedDataset getMnistDataset() {
     Impulse::Dataset::DatasetBuilder::CSVBuilder datasetBuilder1(
             "../data/mnist_test.csv");
@@ -160,7 +57,93 @@ SlicedDataset getMnistTestDataset() {
     return slicedDataset;
 }
 
-void test_mnist_minibatch_gradient_descent() {
+void conv_mnist() {
+    SlicedDataset dataset = getMnistDataset();
+    SlicedDataset testDataset = getMnistTestDataset();
+
+    Builder::ConvBuilder builder({28, 28, 1});
+
+    builder.createLayer<Layer::Conv>([](auto *layer) {
+        layer->setFilterSize(4);
+        layer->setPadding(1);
+        layer->setStride(1);
+        layer->setNumFilters(32);
+    });
+
+    builder.createLayer<Layer::MaxPool>([](auto *layer) {
+        layer->setFilterSize(2);
+        layer->setStride(2);
+    });
+
+    builder.createLayer<Layer::Conv>([](auto *layer) {
+        layer->setFilterSize(3);
+        layer->setPadding(1);
+        layer->setStride(1);
+        layer->setNumFilters(64);
+    });
+
+    builder.createLayer<Layer::MaxPool>([](auto *layer) {
+        layer->setFilterSize(2);
+        layer->setStride(2);
+    });
+
+    builder.createLayer<Layer::FullyConnected>([](auto *layer) {
+
+    });
+
+    builder.createLayer<Layer::Tanh>([](auto *layer) {
+        layer->setSize(1024);
+    });
+
+    builder.createLayer<Layer::Tanh>([](auto *layer) {
+        layer->setSize(256);
+    });
+
+    builder.createLayer<Layer::Softmax>([](auto *layer) {
+        layer->setSize(10);
+    });
+
+    Network::ConvNetwork net = builder.getNetwork();
+
+    Trainer::MiniBatch<Trainer::Optimizer::Adagrad> trainer(net);
+    trainer.setLearningIterations(10);
+    trainer.setVerboseStep(1);
+    trainer.setRegularization(0.1);
+    trainer.setVerbose(true);
+    trainer.setLearningRate(0.005);
+    trainer.setStepCallback([&trainer, &testDataset]() {
+        Trainer::CostGradientResult cost = trainer.cost(testDataset);
+        std::cout << "___STEP___" << std::endl;
+        std::cout << "Cost: " << cost.getCost() << std::endl;
+        std::cout << "Accuracy: " << cost.getAccuracy() << "%" << std::endl;
+    });
+
+    //Trainer::CostGradientResult cost = trainer.cost(dataset);
+    //std::cout << "Cost: " << cost.getCost() << std::endl;
+    //std::cout << "Accuracy: " << cost.getAccuracy() << std::endl;
+    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    trainer.train(dataset);
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+    auto duration = duration_cast<seconds>(t2 - t1).count();
+    std::cout << "Time: " << duration << std::endl;
+    high_resolution_clock::time_point t3 = high_resolution_clock::now();
+    std::cout << "Forward:" << std::endl << net.forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
+    high_resolution_clock::time_point t4 = high_resolution_clock::now();
+    auto duration2 = duration_cast<milliseconds>(t4 - t3).count();
+    std::cout << "Time forward: " << duration2 << std::endl;
+    std::cout << "Cost: " << trainer.cost(dataset).getCost() << std::endl;
+    high_resolution_clock::time_point t5 = high_resolution_clock::now();
+    auto duration3 = duration_cast<milliseconds>(t5 - t4).count();
+    std::cout << "Time cost: " << duration3 << std::endl;
+
+    Serializer serializer(net);
+    serializer.toJSON("../saved/test_conv_mnist.json");
+}
+
+void mnist_minibatch_gradient_descent() {
     SlicedDataset dataset = getMnistDataset();
     SlicedDataset testDataset = getMnistTestDataset();
 
@@ -213,7 +196,7 @@ void test_mnist_minibatch_gradient_descent() {
     serializer.toJSON("../saved/test_mnist_minibatch_gradient_descent.json");
 }
 
-void test_mnist_minibatch_gradient_descent_restore() {
+void mnist_minibatch_gradient_descent_restore() {
     Builder::ClassifierBuilder builder = Builder::ClassifierBuilder::fromJSON("../saved/test_mnist_minibatch_gradient_descent.json");
     Network::ClassifierNetwork network = builder.getNetwork();
 
@@ -239,8 +222,8 @@ void test_mnist_minibatch_gradient_descent_restore() {
 }
 
 int main() {
-    test_mnist_minibatch_gradient_descent();
-    //test_mnist_minibatch_gradient_descent_restore();
-    //test_conv_mnist();
+    //mnist_minibatch_gradient_descent();
+    //mnist_minibatch_gradient_descent_restore();
+    conv_mnist();
     return 0;
 }

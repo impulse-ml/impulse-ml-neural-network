@@ -8,12 +8,13 @@ namespace Impulse {
 
             Softplus::Softplus() : Abstract1D() {};
 
-            Eigen::MatrixXd Softplus::activation(Eigen::MatrixXd &m) {
-                return Computation::factory().softplusActivation(m);
+            Eigen::MatrixXd Softplus::activation() {
+                this->computation->softplusActivation();
+                return this->computation->getVariable("A");
             }
 
             Eigen::MatrixXd Softplus::derivative(Eigen::MatrixXd &a) {
-                return Computation::factory().softplusDerivative(a);
+                return this->computation->softplusDerivative(a);
             }
 
             const T_String Softplus::getType() {

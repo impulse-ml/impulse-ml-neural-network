@@ -9,7 +9,7 @@ namespace Impulse {
             namespace Optimizer {
 
                 void Adagrad::optimize(Layer::Abstract *layer) {
-                    Computation::factory().gradientAdagrad(layer, this->learningRate, this->batchSize);
+                    layer->getComputation()->gradientAdagrad(this->learningRate, this->batchSize);
                 }
             }
         }

@@ -24,25 +24,19 @@ namespace Impulse {
                 T_Size height;                                                          // number of neurons
                 T_Size depth;                                                           // 3D YEAH
                 Layer::LayerPointer previousLayer = nullptr;                            // pointer to the previous layer in the network
+                Computation *computation = nullptr;                                     // calculating unit
 
             public:
-                Eigen::MatrixXd W;                                                      // weights
-                Eigen::VectorXd b;                                                      // bias
-                Eigen::MatrixXd A;                                                      // output of the layer after activation
-                Eigen::MatrixXd Z;                                                      // output of the layer before activation
-                Eigen::MatrixXd gW;                                                     // gradient for weights
-                Eigen::VectorXd gB;                                                     // gradient for biases
-                Eigen::MatrixXd cW;                                                     // for optimizations
-                Eigen::VectorXd cB;                                                     // for optimizations
-                Eigen::MatrixXd vW;                                                     // for optimizations
-                Eigen::VectorXd vB;                                                     // for optimizations
-                Eigen::MatrixXd wW;                                                     // for optimizations
-                Eigen::VectorXd wB;                                                     // for optimizations
                 BackPropagation::BackPropagationPointer backpropagation = nullptr;      // pointer to the backpropagation algorithm
                 /**
-                 * Pure constructor
+                 * Pure constructor.
                  */
                 Abstract();
+
+                /**
+                 * Destructor.
+                 */
+                ~Abstract();
 
                 /**
                  * Forward propagation.
@@ -53,10 +47,9 @@ namespace Impulse {
 
                 /**
                  * Calculates activated values.
-                 * @param input
                  * @return
                  */
-                virtual Eigen::MatrixXd activation(Eigen::MatrixXd &m) = 0;
+                virtual Eigen::MatrixXd activation() = 0;
 
                 /**
                  * Calculates derivative. It depends on activation function.
@@ -189,7 +182,17 @@ namespace Impulse {
                  */
                 virtual void debug() {};
 
+                /**
+                 * Calculates penalty.
+                 * @return
+                 */
                 double penalty();
+
+                /**
+                 * Get computation unit.
+                 * @return
+                 */
+                Computation *getComputation();
             };
         }
     }

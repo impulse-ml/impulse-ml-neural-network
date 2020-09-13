@@ -9,39 +9,46 @@ namespace Impulse {
             Conv::Conv() : Abstract3D() {}
 
             void Conv::configure() {
-                this->W.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->W = Computation::factory().randomInit(this->W, this->width * this->height * this->depth);
+                // initialize weights
+                this->computation->resize("W", this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->computation->randomInit("W", this->width * this->height * this->depth);
 
-                this->b.resize(this->numFilters, 1);
-                this->b = Computation::factory().staticInit(this->b, 0.01);
+                // initialize bias
+                this->computation->resize("b", this->numFilters, 1);
+                this->computation->randomInit("b", 0.01);
 
-                this->gW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->gW.setZero();
+                // initialize gradient
+                this->computation->resize("gW", this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->computation->setZero("gW");
 
-                this->gB.resize(this->numFilters, 1);
-                this->gB.setZero();
+                this->computation->resize("gB", this->numFilters, 1);
+                this->computation->setZero("gB");
 
-                this->cW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->cW.setZero();
+                // initialize optimizer variables
+                this->computation->resize("cW", this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->computation->setZero("cW");
 
-                this->cB.resize(this->numFilters, 1);
-                this->cB.setZero();
+                this->computation->resize("cB", this->numFilters, 1);
+                this->computation->setZero("cB");
 
-                this->vW.resize(this->numFilters, this->filterSize * this->filterSize * this->depth);
-                this->vW.setZero();
+                this->computation->resize("vW", this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->computation->setZero("vW");
 
-                this->vB.resize(this->numFilters, 1);
-                this->vB.setZero();
+                this->computation->resize("vB", this->numFilters, 1);
+                this->computation->setZero("vB");
+
+                this->computation->resize("wW", this->numFilters, this->filterSize * this->filterSize * this->depth);
+                this->computation->setZero("wW");
+
+                this->computation->resize("wB", this->numFilters, 1);
+                this->computation->setZero("wB");
             }
 
             Eigen::MatrixXd Conv::forward(const Eigen::MatrixXd &input) {
-                this->Z = input;
-
                 Eigen::MatrixXd result(this->getOutputWidth() * this->getOutputHeight() * this->getOutputDepth(),
                                        input.cols());
 
 #pragma omp parallel
-#pragma omp for
                 for (T_Size i = 0; i < input.cols(); i++) {
                     Eigen::MatrixXd conv = Utils::im2col(input.col(i), this->depth,
                                                          this->height, this->width,
@@ -49,15 +56,16 @@ namespace Impulse {
                                                          this->padding, this->padding,
                                                          this->stride, this->stride);
 
-                    Eigen::MatrixXd tmp = Computation::factory().forward(this->W, conv,
-                                                                         this->b).transpose(); // transpose for
+                    Eigen::MatrixXd tmp = this->computation->forward(conv).transpose(); // transpose for
                     // rolling to vector
                     Eigen::Map<Eigen::VectorXd> tmp2(tmp.data(), tmp.size());
                     result.col(i) = tmp2;
                 }
 
-                this->A = this->activation(result);
-                return this->A;
+                this->computation->setVariable("Z", result);
+                this->activation();
+                //this->computation->setVariable("Z", input);
+                return this->computation->getVariable("A");
             }
 
             T_Size Conv::getOutputHeight() {
@@ -104,12 +112,13 @@ namespace Impulse {
                 return this->numFilters;
             }
 
-            Eigen::MatrixXd Conv::activation(Eigen::MatrixXd &m) {
-                return Computation::factory().reluActivation(m);
+            Eigen::MatrixXd Conv::activation() {
+                this->computation->reluActivation();
+                return this->computation->getVariable("A");
             }
 
             Eigen::MatrixXd Conv::derivative(Eigen::MatrixXd &a) {
-                return Computation::factory().reluDerivative(a);
+                return this->computation->reluDerivative(a);
             }
 
             const T_String Conv::getType() {

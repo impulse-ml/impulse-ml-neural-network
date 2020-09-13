@@ -8,12 +8,13 @@ namespace Impulse {
 
             Purelin::Purelin() : Abstract1D() {};
 
-            Eigen::MatrixXd Purelin::activation(Eigen::MatrixXd &m) {
-                return m;
+            Eigen::MatrixXd Purelin::activation() {
+                return this->computation->getVariable("Z");
             }
 
             Eigen::MatrixXd Purelin::derivative(Eigen::MatrixXd &) {
-                Eigen::MatrixXd d(this->Z.rows(), this->Z.cols());
+                Eigen::MatrixXd d(this->computation->getVariable("Z").rows(),
+                                  this->computation->getVariable("Z").cols());
                 d.setOnes();
                 return d;
             }
@@ -23,7 +24,7 @@ namespace Impulse {
             }
 
             double Purelin::loss(Eigen::MatrixXd &output, Eigen::MatrixXd &predictions) {
-                return Computation::factory().purelinLoss(output, predictions);
+                return this->computation->purelinLoss(output, predictions);
             }
 
             double Purelin::error(T_Size m) {
