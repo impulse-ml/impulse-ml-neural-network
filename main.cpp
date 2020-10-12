@@ -221,9 +221,19 @@ void mnist_minibatch_gradient_descent_restore() {
     std::cout << "Forward time: " << duration2 << " microseconds." << std::endl;
 }
 
+void test_lstm() {
+    Impulse::Dataset::Dictionary::makeDictionary("../data/input.txt", "../data/output.txt", "../saved/dictionary.txt");
+    Impulse::Dataset::Dictionary dic = Impulse::Dataset::Dictionary::load("../saved/dictionary.txt", "../data/input.txt", "../data/output.txt");
+    std::vector<Eigen::VectorXd> input = dic.getInput();
+    for (T_Size i = 0; i < input.size(); i += 1) {
+        std::cout << input.at(i) << "\n\n\n";
+    }
+}
+
 int main() {
     //mnist_minibatch_gradient_descent();
     //mnist_minibatch_gradient_descent_restore();
-    conv_mnist();
+    //conv_mnist();
+    test_lstm();
     return 0;
 }

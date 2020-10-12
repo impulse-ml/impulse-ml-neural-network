@@ -1,10 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16.3)
 project(impulse_ml_neural_network)
 
 set(CMAKE_CXX_STANDARD 14)
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS} -O3 -mavx -march=corei7")
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 include_directories(src/Impulse/NeuralNetwork)
 include_directories(src/Impulse/NeuralNetwork/Builder)
@@ -13,6 +10,7 @@ include_directories(src/Impulse/NeuralNetwork/Layer/BackPropagation)
 include_directories(src/Impulse/NeuralNetwork/Math)
 include_directories(src/Impulse/NeuralNetwork/Network)
 include_directories(src/Impulse/NeuralNetwork/Trainer)
+include_directories(src/Impulse/NeuralNetwork/Trainer/Optimizer)
 include_directories(src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset)
 include_directories(src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/DatasetBuilder)
 include_directories(src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/DatasetModifier)
@@ -73,20 +71,38 @@ add_executable(impulse_ml_neural_network
         src/Impulse/NeuralNetwork/Network/ClassifierNetwork.h
         src/Impulse/NeuralNetwork/Network/ConvNetwork.cpp
         src/Impulse/NeuralNetwork/Network/ConvNetwork.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Abstract.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Abstract.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adadelta.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adadelta.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adagrad.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adagrad.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/GradientDescent.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/GradientDescent.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Momentum.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Momentum.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Nesterov.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Nesterov.h
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Rmsprop.cpp
+        src/Impulse/NeuralNetwork/Trainer/Optimizer/Rmsprop.h
         src/Impulse/NeuralNetwork/Trainer/Abstract.cpp
         src/Impulse/NeuralNetwork/Trainer/Abstract.h
         src/Impulse/NeuralNetwork/Trainer/common.h
         src/Impulse/NeuralNetwork/Trainer/ConjugateGradient.cpp
         src/Impulse/NeuralNetwork/Trainer/ConjugateGradient.h
-        src/Impulse/NeuralNetwork/Trainer/Stochastic.cpp
-        src/Impulse/NeuralNetwork/Trainer/Stochastic.h
         src/Impulse/NeuralNetwork/Trainer/MiniBatch.cpp
         src/Impulse/NeuralNetwork/Trainer/MiniBatch.h
-        src/Impulse/NeuralNetwork/Trainer/Optimizer/Rmsprop.cpp
-        src/Impulse/NeuralNetwork/Trainer/Optimizer/Rmsprop.h
-        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.cpp
-        src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.h
+        src/Impulse/NeuralNetwork/Trainer/Stochastic.cpp
+        src/Impulse/NeuralNetwork/Trainer/Stochastic.h
+        src/Impulse/NeuralNetwork/AbstractComputation.cpp
+        src/Impulse/NeuralNetwork/AbstractComputation.h
         src/Impulse/NeuralNetwork/common.h
+        src/Impulse/NeuralNetwork/Computation.cpp
+        src/Impulse/NeuralNetwork/Computation.h
+        src/Impulse/NeuralNetwork/ComputationCpu.cpp
+        src/Impulse/NeuralNetwork/ComputationCpu.h
         src/Impulse/NeuralNetwork/include.h
         src/Impulse/NeuralNetwork/Serializer.cpp
         src/Impulse/NeuralNetwork/Serializer.h
@@ -122,12 +138,7 @@ add_executable(impulse_ml_neural_network
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/DatasetExporter.h
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/DatasetSample.cpp
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/DatasetSample.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/Dictionary.h
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/include.h
         src/Vendor/json/src/json.hpp
-        src/Impulse/NeuralNetwork/AbstractComputation.cpp
-        src/Impulse/NeuralNetwork/AbstractComputation.h
-        src/Impulse/NeuralNetwork/ComputationCpu.cpp
-        src/Impulse/NeuralNetwork/ComputationCpu.h
-        src/Impulse/NeuralNetwork/Computation.cpp
-        src/Impulse/NeuralNetwork/Computation.h
-        main.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Abstract.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Abstract.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Adam.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Adagrad.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Adagrad.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Nesterov.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Nesterov.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Momentum.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Momentum.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/GradientDescent.h src/Impulse/NeuralNetwork/Trainer/Optimizer/GradientDescent.cpp src/Impulse/NeuralNetwork/Trainer/Optimizer/Adadelta.h src/Impulse/NeuralNetwork/Trainer/Optimizer/Adadelta.cpp)
+        main.cpp src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset/Dictionary.cpp)

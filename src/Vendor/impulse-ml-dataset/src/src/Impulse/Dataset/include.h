@@ -17,6 +17,8 @@
 #include <utility>
 #include <memory>
 #include <random>
+#include <locale>
+#include <regex>
 
 #include "common.h"
 #include "DatasetSample.h"
@@ -33,3 +35,4 @@
 #include "DatasetModifier/Modifier/MissingData.h"
 #include "DatasetModifier/Modifier/ZScoresScaling.h"
 #include "DatasetExporter.h"
+#include "Dictionary.h"
